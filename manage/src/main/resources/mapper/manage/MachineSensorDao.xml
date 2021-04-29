@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.smart.agriculture.manage.dao.MachineSensorDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.smart.agriculture.manage.entity.MachineSensorEntity" id="machineSensorMap">
+        <result property="conditionNumber" column="condition_number"/>
+        <result property="createtime" column="createTime"/>
+        <result property="machineid" column="machineId"/>
+        <result property="id" column="id"/>
+        <result property="unit" column="unit"/>
+        <result property="channel" column="channel"/>
+        <result property="remark" column="remark"/>
+        <result property="machinename" column="machineName"/>
+        <result property="machineType" column="machine_type"/>
+    </resultMap>
+
+
+</mapper>
