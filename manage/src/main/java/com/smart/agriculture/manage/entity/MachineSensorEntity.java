@@ -1,5 +1,6 @@
 package com.smart.agriculture.manage.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 
@@ -26,15 +27,15 @@ public class MachineSensorEntity implements Serializable {
 	/**
 	 * 记录时间
 	 */
-	private Date createtime;
+	private Date createTime;
 	/**
 	 * 来源设备编号
 	 */
-	private String machineid;
+	private String machineId;
 	/**
 	 * 主键id
 	 */
-	@TableId
+	@TableId(value = "id",type = IdType.INPUT)
 	private Long id;
 	/**
 	 * 单位
@@ -51,7 +52,7 @@ public class MachineSensorEntity implements Serializable {
 	/**
 	 * 来源设备名称
 	 */
-	private String machinename;
+	private String machineName;
 	/**
 	 * 设备类型
 	 */

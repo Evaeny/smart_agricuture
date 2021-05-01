@@ -77,6 +77,17 @@ public class MachineControllerController {
     }
 
     /**
+     * 修改
+     */
+    @RequestMapping("/update/status")
+    //  @RequiresPermissions("manage:machinecontroller:update")
+    public R updateStatus(@RequestBody MachineControllerEntity machineController){
+        machineControllerService.updateById(machineController);
+
+        return R.ok();
+    }
+
+    /**
      * 删除
      */
     @RequestMapping("/delete")

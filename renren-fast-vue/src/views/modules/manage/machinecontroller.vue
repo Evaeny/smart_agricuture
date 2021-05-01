@@ -6,8 +6,8 @@
       </el-form-item>
       <el-form-item>
         <el-button @click="getDataList()">查询</el-button>
-        <el-button  type="primary" @click="addOrUpdateHandle()">新增</el-button>
-        <el-button  type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
+        <el-button type="primary" @click="addOrUpdateHandle()">新增设备</el-button>
+        <el-button type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
       </el-form-item>
     </el-form>
     <el-table
@@ -23,22 +23,22 @@
         width="50">
       </el-table-column>
       <el-table-column
-        prop="id"
+        prop="machineId"
         header-align="center"
         align="center"
-        label="主键id">
+        label="设备编号">
       </el-table-column>
       <el-table-column
-        prop="machinename"
+        prop="machineName"
         header-align="center"
         align="center"
         label="设备名称">
       </el-table-column>
       <el-table-column
-        prop="presetnumber"
+        prop="machineType"
         header-align="center"
         align="center"
-        label="设定数值">
+        label="设备类型">
       </el-table-column>
       <el-table-column
         prop="unit"
@@ -50,25 +50,19 @@
         prop="channel"
         header-align="center"
         align="center"
-        label="设备通道（a、b、c......)">
+        label="设备通道">
       </el-table-column>
-      <el-table-column
-        prop="presetstatus"
-        header-align="center"
-        align="center"
-        label="设定启用状态（默认为不启用）">
-      </el-table-column>
-      <el-table-column
-        prop="machinetype"
-        header-align="center"
-        align="center"
-        label="设备类型">
-      </el-table-column>
-      <el-table-column
-        prop="machineid"
-        header-align="center"
-        align="center"
-        label="设备编号">
+      <el-table-column prop="presetStatus" header-align="center" align="center" label="启用状态">
+        <template slot-scope="scope">
+          <el-switch
+            v-model="scope.row.presetStatus"
+            active-color="#13ce66"
+            inactive-color="#ff4949"
+            :active-value="1"
+            :inactive-value="0"
+            @change="updatepresetStatus(scope.row)"
+          ></el-switch>
+        </template>
       </el-table-column>
       <el-table-column
         fixed="right"
@@ -97,103 +91,122 @@
 </template>
 
 <script>
-  import AddOrUpdate from './machinecontroller-add-or-update'
-  export default {
-    data () {
-      return {
-        dataForm: {
-          key: ''
-        },
-        dataList: [],
-        pageIndex: 1,
-        pageSize: 10,
-        totalPage: 0,
-        dataListLoading: false,
-        dataListSelections: [],
-        addOrUpdateVisible: false
-      }
+import AddOrUpdate from './machinecontroller-add-or-update'
+
+export default {
+  data() {
+    return {
+      dataForm: {
+        key: ''
+      },
+      dataList: [],
+      pageIndex: 1,
+      pageSize: 10,
+      totalPage: 0,
+      dataListLoading: false,
+      dataListSelections: [],
+      addOrUpdateVisible: false
+    }
+  },
+  components: {
+    AddOrUpdate
+  },
+  activated() {
+    this.getDataList()
+  },
+  methods: {
+    // 获取数据列表
+    getDataList() {
+      this.dataListLoading = true
+      this.$http({
+        url: this.$http.adornUrl('/manage/machinecontroller/list'),
+        method: 'get',
+        params: this.$http.adornParams({
+          'page': this.pageIndex,
+          'limit': this.pageSize,
+          'key': this.dataForm.key
+        })
+      }).then(({data}) => {
+        if (data && data.code === 0) {
+          this.dataList = data.page.list
+          this.totalPage = data.page.totalCount
+        } else {
+          this.dataList = []
+          this.totalPage = 0
+        }
+        this.dataListLoading = false
+      })
     },
-    components: {
-      AddOrUpdate
-    },
-    activated () {
+    // 每页数
+    sizeChangeHandle(val) {
+      this.pageSize = val
+      this.pageIndex = 1
       this.getDataList()
     },
-    methods: {
-      // 获取数据列表
-      getDataList () {
-        this.dataListLoading = true
+    // 当前页
+    currentChangeHandle(val) {
+      this.pageIndex = val
+      this.getDataList()
+    },
+    // 多选
+    selectionChangeHandle(val) {
+      this.dataListSelections = val
+    },
+    // 新增 / 修改
+    addOrUpdateHandle(id) {
+      this.addOrUpdateVisible = true
+      this.$nextTick(() => {
+        this.$refs.addOrUpdate.init(id)
+      })
+    },
+    // 删除
+    deleteHandle(id) {
+      var ids = id ? [id] : this.dataListSelections.map(item => {
+        return item.id
+      })
+      this.$confirm(`确定对[id=${ids.join(',')}]进行[${id ? '删除' : '批量删除'}]操作?`, '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
         this.$http({
-          url: this.$http.adornUrl('/manage/machinecontroller/list'),
-          method: 'get',
-          params: this.$http.adornParams({
-            'page': this.pageIndex,
-            'limit': this.pageSize,
-            'key': this.dataForm.key
-          })
+          url: this.$http.adornUrl('/manage/machinecontroller/delete'),
+          method: 'post',
+          data: this.$http.adornData(ids, false)
         }).then(({data}) => {
           if (data && data.code === 0) {
-            this.dataList = data.page.list
-            this.totalPage = data.page.totalCount
+            this.$message({
+              message: '操作成功',
+              type: 'success',
+              duration: 1500,
+              onClose: () => {
+                this.getDataList()
+              }
+            })
           } else {
-            this.dataList = []
-            this.totalPage = 0
+            this.$message.error(data.msg)
           }
-          this.dataListLoading = false
         })
-      },
-      // 每页数
-      sizeChangeHandle (val) {
-        this.pageSize = val
-        this.pageIndex = 1
-        this.getDataList()
-      },
-      // 当前页
-      currentChangeHandle (val) {
-        this.pageIndex = val
-        this.getDataList()
-      },
-      // 多选
-      selectionChangeHandle (val) {
-        this.dataListSelections = val
-      },
-      // 新增 / 修改
-      addOrUpdateHandle (id) {
-        this.addOrUpdateVisible = true
-        this.$nextTick(() => {
-          this.$refs.addOrUpdate.init(id)
-        })
-      },
-      // 删除
-      deleteHandle (id) {
-        var ids = id ? [id] : this.dataListSelections.map(item => {
-          return item.id
-        })
-        this.$confirm(`确定对[id=${ids.join(',')}]进行[${id ? '删除' : '批量删除'}]操作?`, '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          this.$http({
-            url: this.$http.adornUrl('/manage/machinecontroller/delete'),
-            method: 'post',
-            data: this.$http.adornData(ids, false)
-          }).then(({data}) => {
-            if (data && data.code === 0) {
-              this.$message({
-                message: '操作成功',
-                type: 'success',
-                duration: 1500,
-                onClose: () => {
-                  this.getDataList()
-                }
-              })
-            } else {
-              this.$message.error(data.msg)
-            }
-          })
-        })
-      }
-    }
+      })
+    },
+    // 修改显示状态
+    updatepresetStatus(data) {
+      // console.log("最新信息", data);
+      let {id, presetStatus} = data;
+      //发送请求修改状态
+      this.$http({
+        url: this.$http.adornUrl("/manage/machinecontroller/update/status"),
+        method: "post",
+        data: this.$http.adornData({id, presetStatus}, false)
+      }).then(({data}) => {
+        this.$message({
+          type: "success",
+          message: "状态更新成功"
+        });
+      }).catch(() => {
+      });
+      ;
+    },
   }
+}
 </script>

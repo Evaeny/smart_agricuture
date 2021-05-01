@@ -77,6 +77,17 @@ public class MachineSensorController {
     }
 
     /**
+     * 修改状态
+     */
+    @RequestMapping("/update/status")
+    //  @RequiresPermissions("manage:machinesensor:update")
+    public R updateStatus(@RequestBody MachineSensorEntity machineSensor){
+        machineSensorService.updateById(machineSensor);
+
+        return R.ok();
+    }
+
+    /**
      * 删除
      */
     @RequestMapping("/delete")
