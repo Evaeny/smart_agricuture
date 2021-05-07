@@ -6,7 +6,7 @@
         <div class="grid-content bg-purple">
           <h3>最新资讯</h3>
           <div class="text item">
-           <a href="detail.vue">李克强称赞中国农民真了不起</a>
+            <a @click="$router.push({ name: 'detail' })">李克强称赞中国农民真了不起</a>
           </div>
         </div>
       </el-col>
