@@ -145,7 +145,9 @@
             'machineType': this.dataForm.machineType,
             'machineId': this.dataForm.machineId,
             'machineName': this.dataForm.machineName,
-            'channel': this.dataForm.channel
+            'channel': this.dataForm.channel,
+            'startTime':this.dataForm.startTime,
+            'endTime':this.dataForm.endTime
           })
         }).then(({data}) => {
           if (data && data.code === 0) {
