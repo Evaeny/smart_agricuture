@@ -29,7 +29,6 @@ public class MachineSensorServiceImpl extends ServiceImpl<MachineSensorDao, Mach
                 new Query<MachineSensorEntity>().getPage(params),
                 queryWrapper
         );
-
         return new PageUtils(page);
     }
 

@@ -3,32 +3,38 @@
     <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()">
       <el-form-item>
         <el-form-item>
-          <el-form-item label="来源设备编号">
-            <el-input v-model="dataForm.machineId" placeholder="来源设备编号" clearable></el-input>
+          <el-form-item label="设备编号">
+            <el-input v-model="dataForm.machineId" placeholder="设备编号" clearable></el-input>
           </el-form-item>
-          <el-form-item label="来源设备名称">
-            <el-input v-model="dataForm.machineName" placeholder="来源设备名称" clearable></el-input>
+          <el-form-item label="设备名称">
+            <el-input v-model="dataForm.machineName" placeholder="设备名称" clearable></el-input>
           </el-form-item>
-          <el-form-item label="来源通道">
-            <el-input v-model="dataForm.channel" placeholder="来源通道" clearable></el-input>
+          <el-form-item label="设备通道">
+            <el-select v-model="dataForm.channel" placeholder="请选择设备通道" clearable>
+              <el-option
+                v-for="item in channelList"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select>
           </el-form-item>
-          <el-form-item label="接收时间">
-            <el-col :span="10">
-              <el-date-picker type="date" placeholder="开始时间" v-model="dataForm.startTime"
-                              style="width: 100%;"></el-date-picker>
-            </el-col>
-            <el-col :span="10" style="padding-left: 10px">
-              <el-date-picker type="date" placeholder="结束时间" v-model="dataForm.endTime"
-                              style="width: 100%;"></el-date-picker>
-            </el-col>
+          <el-form-item label="设备类型">
+            <el-select v-model="dataForm.machineType" disabled clearable>
+              <el-option
+                v-for="item in machineTypeList"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select>
           </el-form-item>
         </el-form-item>
       </el-form-item>
       <el-form-item>
         <el-button @click="getDataList()">查询</el-button>
-        <el-button type="danger" @click="deleteHandle()"
-                   :disabled="dataListSelections.length <= 0">批量删除
-        </el-button>
+        <el-button type="primary" @click="addOrUpdateHandle()">新增设备</el-button>
+        <el-button type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
       </el-form-item>
     </el-form>
     <el-table
@@ -44,34 +50,46 @@
         width="50">
       </el-table-column>
       <el-table-column
-        prop="id"
+        prop="machineId"
         header-align="center"
         align="center"
-        label="序号">
+        label="设备编号">
       </el-table-column>
       <el-table-column
-        prop="messagetype"
+        prop="machineName"
         header-align="center"
         align="center"
-        label="消息类型">
+        label="设备名称">
       </el-table-column>
       <el-table-column
-        prop="machineid"
+        prop="machineType"
         header-align="center"
         align="center"
-        label="来源设备编号">
+        label="设备类型">
       </el-table-column>
       <el-table-column
-        prop="machinename"
+        prop="unit"
         header-align="center"
         align="center"
-        label="来源设备名称">
+        label="单位">
       </el-table-column>
       <el-table-column
-        prop="creattime"
+        prop="channel"
         header-align="center"
         align="center"
-        label="接收时间">
+        label="设备通道">
+      </el-table-column>
+      <el-table-column prop="presetStatus" header-align="center" align="center" label="启用状态">
+        <template slot-scope="scope">
+          <el-switch
+            v-model="scope.row.presetStatus"
+            active-color="#13ce66"
+            inactive-color="#ff4949"
+            :active-value="1"
+            :inactive-value="0"
+            @change="updatepresetStatus(scope.row)"
+          ></el-switch>
+        </template>
       </el-table-column>
       <el-table-column
         fixed="right"
@@ -80,6 +98,7 @@
         width="150"
         label="操作">
         <template slot-scope="scope">
+          <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">管理</el-button>
           <el-button type="text" size="small" @click="deleteHandle(scope.row.id)">删除</el-button>
         </template>
       </el-table-column>
@@ -99,15 +118,49 @@
 </template>
 
 <script>
-  import AddOrUpdate from './messageinfo-add-or-update'
+  import AddOrUpdate from './machinecontroller-add-or-update'
 
   export default {
     data() {
       return {
         dataForm: {
-          key: ''
+          machineType: 'd'
         },
         dataList: [],
+        channelList: [{
+          value: 'a',
+          label: 'a'
+        }, {
+          value: 'b',
+          label: 'b'
+        }, {
+          value: 'c',
+          label: 'c'
+        }, {
+          value: 'd',
+          label: 'd'
+        }],
+        machineTypeList: [
+          {
+            value: 'a',
+            label: '土壤温度控制器'
+          }, {
+            value: 'b',
+            label: '土壤加湿器'
+          }, {
+            value: 'c',
+            label: '空气加湿器'
+          }, {
+            value: 'd',
+            label: '挡风板'
+          }, {
+            value: 'e',
+            label: '遮光板-补光灯'
+          }, {
+            value: 'f',
+            label: 'CO2浓度控制器'
+          }
+        ],
         pageIndex: 1,
         pageSize: 10,
         totalPage: 0,
@@ -127,7 +180,7 @@
       getDataList() {
         this.dataListLoading = true
         this.$http({
-          url: this.$http.adornUrl('/manage/messageinfo/list'),
+          url: this.$http.adornUrl('/manage/machinecontroller/list'),
           method: 'get',
           params: this.$http.adornParams({
             'page': this.pageIndex,
@@ -181,7 +234,7 @@
           type: 'warning'
         }).then(() => {
           this.$http({
-            url: this.$http.adornUrl('/manage/messageinfo/delete'),
+            url: this.$http.adornUrl('/manage/machinecontroller/delete'),
             method: 'post',
             data: this.$http.adornData(ids, false)
           }).then(({data}) => {
@@ -199,7 +252,25 @@
             }
           })
         })
-      }
+      },
+      // 修改显示状态
+      updatepresetStatus(data) {
+        // console.log("最新信息", data);
+        let {id, presetStatus} = data;
+        //发送请求修改状态
+        this.$http({
+          url: this.$http.adornUrl("/manage/machinecontroller/update/status"),
+          method: "post",
+          data: this.$http.adornData({id, presetStatus}, false)
+        }).then(({data}) => {
+          this.$message({
+            type: "success",
+            message: "状态更新成功"
+          });
+        }).catch(() => {
+        });
+
+      },
     }
   }
 </script>

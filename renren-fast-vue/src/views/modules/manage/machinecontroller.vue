@@ -2,7 +2,34 @@
   <div class="mod-config">
     <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()">
       <el-form-item>
-        <el-input v-model="dataForm.key" placeholder="参数名" clearable></el-input>
+        <el-form-item>
+          <el-form-item label="设备编号">
+            <el-input v-model="dataForm.machineId" placeholder="设备编号" clearable></el-input>
+          </el-form-item>
+          <el-form-item label="设备名称">
+            <el-input v-model="dataForm.machineName" placeholder="设备名称" clearable></el-input>
+          </el-form-item>
+          <el-form-item label="设备通道">
+            <el-select v-model="dataForm.channel" placeholder="请选择设备通道" clearable>
+              <el-option
+                v-for="item in channelList"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="设备类型">
+            <el-select v-model="dataForm.machineType" placeholder="请选择设备通道" clearable>
+              <el-option
+                v-for="item in machineTypeList"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select>
+          </el-form-item>
+        </el-form-item>
       </el-form-item>
       <el-form-item>
         <el-button @click="getDataList()">查询</el-button>
@@ -91,122 +118,159 @@
 </template>
 
 <script>
-import AddOrUpdate from './machinecontroller-add-or-update'
+  import AddOrUpdate from './machinecontroller-add-or-update'
 
-export default {
-  data() {
-    return {
-      dataForm: {
-        key: ''
-      },
-      dataList: [],
-      pageIndex: 1,
-      pageSize: 10,
-      totalPage: 0,
-      dataListLoading: false,
-      dataListSelections: [],
-      addOrUpdateVisible: false
-    }
-  },
-  components: {
-    AddOrUpdate
-  },
-  activated() {
-    this.getDataList()
-  },
-  methods: {
-    // 获取数据列表
-    getDataList() {
-      this.dataListLoading = true
-      this.$http({
-        url: this.$http.adornUrl('/manage/machinecontroller/list'),
-        method: 'get',
-        params: this.$http.adornParams({
-          'page': this.pageIndex,
-          'limit': this.pageSize,
-          'key': this.dataForm.key
-        })
-      }).then(({data}) => {
-        if (data && data.code === 0) {
-          this.dataList = data.page.list
-          this.totalPage = data.page.totalCount
-        } else {
-          this.dataList = []
-          this.totalPage = 0
-        }
-        this.dataListLoading = false
-      })
+  export default {
+    data() {
+      return {
+        dataForm: {
+          key: ''
+        },
+        dataList: [],
+        channelList: [{
+          value: 'a',
+          label: 'a'
+        }, {
+          value: 'b',
+          label: 'b'
+        }, {
+          value: 'c',
+          label: 'c'
+        }, {
+          value: 'd',
+          label: 'd'
+        }],
+        machineTypeList: [
+          {
+            value: 'a',
+            label: '土壤温度控制器'
+          }, {
+            value: 'b',
+            label: '土壤加湿器'
+          }, {
+            value: 'c',
+            label: '空气加湿器'
+          }, {
+            value: 'd',
+            label: '挡风板'
+          }, {
+            value: 'e',
+            label: '遮光板-补光灯'
+          }, {
+            value: 'f',
+            label: 'CO2浓度控制器'
+          }
+        ],
+        pageIndex: 1,
+        pageSize: 10,
+        totalPage: 0,
+        dataListLoading: false,
+        dataListSelections: [],
+        addOrUpdateVisible: false
+      }
     },
-    // 每页数
-    sizeChangeHandle(val) {
-      this.pageSize = val
-      this.pageIndex = 1
+    components: {
+      AddOrUpdate
+    },
+    activated() {
       this.getDataList()
     },
-    // 当前页
-    currentChangeHandle(val) {
-      this.pageIndex = val
-      this.getDataList()
-    },
-    // 多选
-    selectionChangeHandle(val) {
-      this.dataListSelections = val
-    },
-    // 新增 / 修改
-    addOrUpdateHandle(id) {
-      this.addOrUpdateVisible = true
-      this.$nextTick(() => {
-        this.$refs.addOrUpdate.init(id)
-      })
-    },
-    // 删除
-    deleteHandle(id) {
-      var ids = id ? [id] : this.dataListSelections.map(item => {
-        return item.id
-      })
-      this.$confirm(`确定对[id=${ids.join(',')}]进行[${id ? '删除' : '批量删除'}]操作?`, '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
+    methods: {
+      // 获取数据列表
+      getDataList() {
+        this.dataListLoading = true
         this.$http({
-          url: this.$http.adornUrl('/manage/machinecontroller/delete'),
-          method: 'post',
-          data: this.$http.adornData(ids, false)
+          url: this.$http.adornUrl('/manage/machinecontroller/list'),
+          method: 'get',
+          params: this.$http.adornParams({
+            'page': this.pageIndex,
+            'limit': this.pageSize,
+            'machineType': this.dataForm.machineType,
+            'machineId': this.dataForm.machineId,
+            'machineName': this.dataForm.machineName,
+            'channel': this.dataForm.channel,
+          })
         }).then(({data}) => {
           if (data && data.code === 0) {
-            this.$message({
-              message: '操作成功',
-              type: 'success',
-              duration: 1500,
-              onClose: () => {
-                this.getDataList()
-              }
-            })
+            this.dataList = data.page.list
+            this.totalPage = data.page.totalCount
           } else {
-            this.$message.error(data.msg)
+            this.dataList = []
+            this.totalPage = 0
           }
+          this.dataListLoading = false
         })
-      })
-    },
-    // 修改显示状态
-    updatepresetStatus(data) {
-      // console.log("最新信息", data);
-      let {id, presetStatus} = data;
-      //发送请求修改状态
-      this.$http({
-        url: this.$http.adornUrl("/manage/machinecontroller/update/status"),
-        method: "post",
-        data: this.$http.adornData({id, presetStatus}, false)
-      }).then(({data}) => {
-        this.$message({
-          type: "success",
-          message: "状态更新成功"
+      },
+      // 每页数
+      sizeChangeHandle(val) {
+        this.pageSize = val
+        this.pageIndex = 1
+        this.getDataList()
+      },
+      // 当前页
+      currentChangeHandle(val) {
+        this.pageIndex = val
+        this.getDataList()
+      },
+      // 多选
+      selectionChangeHandle(val) {
+        this.dataListSelections = val
+      },
+      // 新增 / 修改
+      addOrUpdateHandle(id) {
+        this.addOrUpdateVisible = true
+        this.$nextTick(() => {
+          this.$refs.addOrUpdate.init(id)
+        })
+      },
+      // 删除
+      deleteHandle(id) {
+        var ids = id ? [id] : this.dataListSelections.map(item => {
+          return item.id
+        })
+        this.$confirm(`确定对[id=${ids.join(',')}]进行[${id ? '删除' : '批量删除'}]操作?`, '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$http({
+            url: this.$http.adornUrl('/manage/machinecontroller/delete'),
+            method: 'post',
+            data: this.$http.adornData(ids, false)
+          }).then(({data}) => {
+            if (data && data.code === 0) {
+              this.$message({
+                message: '操作成功',
+                type: 'success',
+                duration: 1500,
+                onClose: () => {
+                  this.getDataList()
+                }
+              })
+            } else {
+              this.$message.error(data.msg)
+            }
+          })
+        })
+      },
+      // 修改显示状态
+      updatepresetStatus(data) {
+        // console.log("最新信息", data);
+        let {id, presetStatus} = data;
+        //发送请求修改状态
+        this.$http({
+          url: this.$http.adornUrl("/manage/machinecontroller/update/status"),
+          method: "post",
+          data: this.$http.adornData({id, presetStatus}, false)
+        }).then(({data}) => {
+          this.$message({
+            type: "success",
+            message: "状态更新成功"
+          });
+        }).catch(() => {
         });
-      }).catch(() => {
-      });
-      ;
-    },
+
+      },
+    }
   }
-}
 </script>
