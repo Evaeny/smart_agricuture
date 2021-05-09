@@ -1,5 +1,6 @@
 package com.smart.agriculture.manage.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 
@@ -26,7 +27,7 @@ public class MachineInfoEntity implements Serializable {
 	/**
 	 * 主键id
 	 */
-	@TableId
+	@TableId(value = "id",type = IdType.INPUT)
 	private Long id;
 	/**
 	 * 设备名称
