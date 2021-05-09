@@ -1,9 +1,9 @@
 package com.smart.agriculture.manage.controller;
 
-import java.util.Arrays;
-import java.util.Map;
-
-//import org.apache.shiro.authz.annotation.RequiresPermissions;
+import com.smart.agriculture.common.utils.PageUtils;
+import com.smart.agriculture.common.utils.R;
+import com.smart.agriculture.manage.entity.MachineInfoEntity;
+import com.smart.agriculture.manage.service.MachineInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -11,18 +11,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.smart.agriculture.manage.entity.MachineInfoEntity;
-import com.smart.agriculture.manage.service.MachineInfoService;
-import com.smart.agriculture.common.utils.PageUtils;
-import com.smart.agriculture.common.utils.R;
+import java.util.Arrays;
+import java.util.Map;
 
+//import org.apache.shiro.authz.annotation.RequiresPermissions;
 
 
 /**
- * 
- *
  * @author Evan
- * @email 
+ * @email
  * @date 2021-04-29 14:22:58
  */
 @RestController
@@ -35,8 +32,8 @@ public class MachineInfoController {
      * 列表
      */
     @RequestMapping("/list")
-  //  @RequiresPermissions("manage:machineinfo:list")
-    public R list(@RequestParam Map<String, Object> params){
+    //  @RequiresPermissions("manage:machineinfo:list")
+    public R list(@RequestParam Map<String, Object> params) {
         PageUtils page = machineInfoService.queryPage(params);
 
         return R.ok().put("page", page);
@@ -47,10 +44,9 @@ public class MachineInfoController {
      * 信息
      */
     @RequestMapping("/info/{id}")
-  //  @RequiresPermissions("manage:machineinfo:info")
-    public R info(@PathVariable("id") Long id){
-		MachineInfoEntity machineInfo = machineInfoService.getById(id);
-
+    //  @RequiresPermissions("manage:machineinfo:info")
+    public R info(@PathVariable("id") Long id) {
+        MachineInfoEntity machineInfo = machineInfoService.getById(id);
         return R.ok().put("machineInfo", machineInfo);
     }
 
@@ -58,9 +54,9 @@ public class MachineInfoController {
      * 保存
      */
     @RequestMapping("/save")
- //   @RequiresPermissions("manage:machineinfo:save")
-    public R save(@RequestBody MachineInfoEntity machineInfo){
-		machineInfoService.save(machineInfo);
+    //   @RequiresPermissions("manage:machineinfo:save")
+    public R save(@RequestBody MachineInfoEntity machineInfo) {
+        machineInfoService.save(machineInfo);
 
         return R.ok();
     }
@@ -69,9 +65,9 @@ public class MachineInfoController {
      * 修改
      */
     @RequestMapping("/update")
-  //  @RequiresPermissions("manage:machineinfo:update")
-    public R update(@RequestBody MachineInfoEntity machineInfo){
-		machineInfoService.updateById(machineInfo);
+    //  @RequiresPermissions("manage:machineinfo:update")
+    public R update(@RequestBody MachineInfoEntity machineInfo) {
+        machineInfoService.updateById(machineInfo);
 
         return R.ok();
     }
@@ -80,9 +76,9 @@ public class MachineInfoController {
      * 删除
      */
     @RequestMapping("/delete")
-  //  @RequiresPermissions("manage:machineinfo:delete")
-    public R delete(@RequestBody Long[] ids){
-		machineInfoService.removeByIds(Arrays.asList(ids));
+    //  @RequiresPermissions("manage:machineinfo:delete")
+    public R delete(@RequestBody Long[] ids) {
+        machineInfoService.removeByIds(Arrays.asList(ids));
 
         return R.ok();
     }

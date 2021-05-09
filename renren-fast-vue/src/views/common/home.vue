@@ -8,13 +8,43 @@
           <div class="text item">
             <a @click="$router.push({ name: 'detail' })">李克强称赞中国农民真了不起</a>
           </div>
+          <div class="text item">
+            <a @click="$router.push({ name: 'detail' })">李克强称赞中国农民真了不起</a>
+          </div>
+          <div class="text item">
+            <a @click="$router.push({ name: 'detail' })">李克强称赞中国农民真了不起</a>
+          </div>
+          <div class="text item">
+            <a @click="$router.push({ name: 'detail' })">李克强称赞中国农民真了不起</a>
+          </div>
+          <div class="text item">
+            <a @click="$router.push({ name: 'detail' })">李克强称赞中国农民真了不起</a>
+          </div>
+          <div class="text item">
+            <a @click="$router.push({ name: 'detail' })">李克强称赞中国农民真了不起</a>
+          </div>
         </div>
       </el-col>
       <el-col :span="12">
         <div class="grid-content bg-purple-light">
           <h3>技术文献</h3>
           <div class="text item">
-            <a>李克强称赞中国农民真了不起</a>
+            <a @click="$router.push({ name: 'detail' })">李克强称赞中国农民真了不起</a>
+          </div>
+          <div class="text item">
+            <a @click="$router.push({ name: 'detail' })">李克强称赞中国农民真了不起</a>
+          </div>
+          <div class="text item">
+            <a @click="$router.push({ name: 'detail' })">李克强称赞中国农民真了不起</a>
+          </div>
+          <div class="text item">
+            <a @click="$router.push({ name: 'detail' })">李克强称赞中国农民真了不起</a>
+          </div>
+          <div class="text item">
+            <a @click="$router.push({ name: 'detail' })">李克强称赞中国农民真了不起</a>
+          </div>
+          <div class="text item">
+            <a @click="$router.push({ name: 'detail' })">李克强称赞中国农民真了不起</a>
           </div>
         </div>
       </el-col>
