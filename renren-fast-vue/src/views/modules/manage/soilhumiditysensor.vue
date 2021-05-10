@@ -47,7 +47,7 @@
         label="单位">
       </el-table-column>
       <el-table-column
-        prop="createtime"
+        prop="createTime"
         header-align="center"
         align="center"
         label="记录时间">
@@ -123,7 +123,10 @@
           params: this.$http.adornParams({
             'page': this.pageIndex,
             'limit': this.pageSize,
-            'key': this.dataForm.key
+            'machineType': this.dataForm.machineType,
+            'machineId': this.dataForm.machineId,
+            'machineName': this.dataForm.machineName,
+            'channel': this.dataForm.channel,
           })
         }).then(({data}) => {
           if (data && data.code === 0) {

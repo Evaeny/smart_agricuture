@@ -4,7 +4,7 @@
     :close-on-click-modal="false"
     :visible.sync="visible">
     <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()"
-             label-width="80px">
+             label-width="140px">
       <el-form-item label="空气湿度" prop="airHumidity">
         <el-input v-model="dataForm.airHumidity" placeholder="空气湿度"></el-input>
       </el-form-item>
@@ -87,13 +87,13 @@
               params: this.$http.adornParams()
             }).then(({data}) => {
               if (data && data.code === 0) {
-                this.dataForm.airHumidity = data.airHumiditySensor.airHumidity;
-                this.dataForm.createTime = data.airHumiditySensor.createTime;
-                this.dataForm.machineId = data.airHumiditySensor.machineId;
-                this.dataForm.unit = data.airHumiditySensor.unit;
-                this.dataForm.channel = data.airHumiditySensor.channel;
-                this.dataForm.remark = data.airHumiditySensor.remark;
-                this.dataForm.machineName = data.airHumiditySensor.machineName;
+                this.dataForm.airHumidity = data.machineSensor.airHumidity;
+                this.dataForm.createTime = data.machineSensor.createTime;
+                this.dataForm.machineId = data.machineSensor.machineId;
+                this.dataForm.unit = data.machineSensor.unit;
+                this.dataForm.channel = data.machineSensor.channel;
+                this.dataForm.remark = data.machineSensor.remark;
+                this.dataForm.machineName = data.machineSensor.machineName;
               }
             })
           }

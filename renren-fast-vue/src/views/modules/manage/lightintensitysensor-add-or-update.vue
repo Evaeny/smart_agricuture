@@ -81,18 +81,18 @@
           this.$refs['dataForm'].resetFields()
           if (this.dataForm.id) {
             this.$http({
-              url: this.$http.adornUrl(`/manage/lightintensitysensor/info/${this.dataForm.id}`),
+              url: this.$http.adornUrl(`/manage/machineSensor/info/${this.dataForm.id}`),
               method: 'get',
               params: this.$http.adornParams()
             }).then(({data}) => {
               if (data && data.code === 0) {
-                this.dataForm.lightintensity = data.lightIntensitySensor.lightintensity
-                this.dataForm.createtime = data.lightIntensitySensor.createtime
-                this.dataForm.machineid = data.lightIntensitySensor.machineid
-                this.dataForm.unit = data.lightIntensitySensor.unit
-                this.dataForm.channel = data.lightIntensitySensor.channel
-                this.dataForm.remark = data.lightIntensitySensor.remark
-                this.dataForm.machinename = data.lightIntensitySensor.machinename
+                this.dataForm.lightintensity = data.machineSensor.lightintensity
+                this.dataForm.createtime = data.machineSensor.createtime
+                this.dataForm.machineid = data.machineSensor.machineid
+                this.dataForm.unit = data.machineSensor.unit
+                this.dataForm.channel = data.machineSensor.channel
+                this.dataForm.remark = data.machineSensor.remark
+                this.dataForm.machinename = data.machineSensor.machinename
               }
             })
           }
@@ -103,7 +103,7 @@
         this.$refs['dataForm'].validate((valid) => {
           if (valid) {
             this.$http({
-              url: this.$http.adornUrl(`/manage/lightintensitysensor/${!this.dataForm.id ? 'save' : 'update'}`),
+              url: this.$http.adornUrl(`/manage/machineSensor/${!this.dataForm.id ? 'save' : 'update'}`),
               method: 'post',
               data: this.$http.adornData({
                 'lightintensity': this.dataForm.lightintensity,

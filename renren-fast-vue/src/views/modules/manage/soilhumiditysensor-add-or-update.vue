@@ -3,7 +3,7 @@
     :title="!dataForm.id ? '新增' : '修改'"
     :close-on-click-modal="false"
     :visible.sync="visible">
-    <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" label-width="80px">
+    <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" label-width="140px">
     <el-form-item label="土壤湿度" prop="soilmoisture">
       <el-input v-model="dataForm.soilmoisture" placeholder="土壤湿度"></el-input>
     </el-form-item>
@@ -86,13 +86,13 @@
               params: this.$http.adornParams()
             }).then(({data}) => {
               if (data && data.code === 0) {
-                this.dataForm.soilmoisture = data.soilHumiditySensor.soilmoisture
-                this.dataForm.createtime = data.soilHumiditySensor.createtime
-                this.dataForm.machineid = data.soilHumiditySensor.machineid
-                this.dataForm.unit = data.soilHumiditySensor.unit
-                this.dataForm.channel = data.soilHumiditySensor.channel
-                this.dataForm.remark = data.soilHumiditySensor.remark
-                this.dataForm.machinename = data.soilHumiditySensor.machinename
+                this.dataForm.soilmoisture = data.machineSensor.soilmoisture
+                this.dataForm.createtime = data.machineSensor.createtime
+                this.dataForm.machineid = data.machineSensor.machineid
+                this.dataForm.unit = data.machineSensor.unit
+                this.dataForm.channel = data.machineSensor.channel
+                this.dataForm.remark = data.machineSensor.remark
+                this.dataForm.machinename = data.machineSensor.machinename
               }
             })
           }

@@ -65,6 +65,7 @@
         prop="machineType"
         header-align="center"
         align="center"
+        :formatter="formatterMachineType"
         label="设备类型">
       </el-table-column>
       <el-table-column
@@ -271,6 +272,27 @@
         });
 
       },
+      formatterMachineType(row, column) {
+        let machineType = row[column.property];
+        switch (machineType) {
+          case 'a':
+            return '土壤温度控制器';
+          case 'b':
+            return '土壤加湿器';
+          case 'c':
+            return '空气加湿器';
+          case 'd':
+            return '挡风板';
+          case 'e':
+            return '遮光板-补光灯';
+
+          case 'f':
+            return 'CO2浓度控制器';
+
+          default :
+            return '';
+        }
+      }
     }
   }
 </script>

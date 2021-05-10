@@ -41,13 +41,13 @@
         width="50">
       </el-table-column>
       <el-table-column
-        prop="machineid"
+        prop="machineId"
         header-align="center"
         align="center"
         label="来源设备编号">
       </el-table-column>
       <el-table-column
-        prop="machinename"
+        prop="machineName"
         header-align="center"
         align="center"
         label="来源设备名称">
@@ -65,7 +65,7 @@
         label="单位">
       </el-table-column>
       <el-table-column
-        prop="createtime"
+        prop="createTime"
         header-align="center"
         align="center"
         label="记录时间">
