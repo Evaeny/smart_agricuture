@@ -18,7 +18,7 @@ import java.util.Date;
  *
  * @author 蒋一帆
  */
-@Component
+//@Component
 public class MessageInfoTask {
 
     @Autowired
@@ -34,9 +34,8 @@ public class MessageInfoTask {
         System.out.println("执行消息中心定时任务时间: " + LocalDateTime.now());
         String randomEle = RandomUtil.randomEle(machineNameList);
         MessageInfoEntity messageInfoEntity = MessageInfoEntityInit.map.get(randomEle);
-        messageInfoEntity.setDeletyn("1");
-        messageInfoEntity.setCreattime(new Date());
+        messageInfoEntity.setDeletYn("1");
+        messageInfoEntity.setCreatTime(new Date());
         messageInfoService.save(messageInfoEntity);
-
     }
 }

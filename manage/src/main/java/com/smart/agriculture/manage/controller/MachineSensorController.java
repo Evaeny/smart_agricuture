@@ -1,9 +1,9 @@
 package com.smart.agriculture.manage.controller;
 
-import java.util.Arrays;
-import java.util.Map;
-
-//import org.apache.shiro.authz.annotation.RequiresPermissions;
+import com.smart.agriculture.common.utils.PageUtils;
+import com.smart.agriculture.common.utils.R;
+import com.smart.agriculture.manage.entity.MachineSensorEntity;
+import com.smart.agriculture.manage.service.MachineSensorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -11,18 +11,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.smart.agriculture.manage.entity.MachineSensorEntity;
-import com.smart.agriculture.manage.service.MachineSensorService;
-import com.smart.agriculture.common.utils.PageUtils;
-import com.smart.agriculture.common.utils.R;
+import java.util.Arrays;
+import java.util.Map;
 
+//import org.apache.shiro.authz.annotation.RequiresPermissions;
 
 
 /**
- * 
- *
  * @author Evan
- * @email 
+ * @email
  * @date 2021-04-29 14:22:58
  */
 @RestController
@@ -35,8 +32,8 @@ public class MachineSensorController {
      * 列表
      */
     @RequestMapping("/list")
-  //  @RequiresPermissions("manage:machinesensor:list")
-    public R list(@RequestParam Map<String, Object> params){
+    //  @RequiresPermissions("manage:machinesensor:list")
+    public R list(@RequestParam Map<String, Object> params) {
         PageUtils page = machineSensorService.queryPage(params);
 
         return R.ok().put("page", page);
@@ -47,9 +44,10 @@ public class MachineSensorController {
      * 信息
      */
     @RequestMapping("/info/{id}")
-  //  @RequiresPermissions("manage:machinesensor:info")
-    public R info(@PathVariable("id") Long id){
-		MachineSensorEntity machineSensor = machineSensorService.getById(id);
+    //  @RequiresPermissions("manage:machinesensor:info")
+    public R info(@PathVariable("id") Long id) {
+
+        MachineSensorEntity machineSensor = machineSensorService.getById(id);
 
         return R.ok().put("machineSensor", machineSensor);
     }
@@ -58,10 +56,9 @@ public class MachineSensorController {
      * 保存
      */
     @RequestMapping("/save")
- //   @RequiresPermissions("manage:machinesensor:save")
-    public R save(@RequestBody MachineSensorEntity machineSensor){
-		machineSensorService.save(machineSensor);
-
+    //   @RequiresPermissions("manage:machinesensor:save")
+    public R save(@RequestBody MachineSensorEntity machineSensor) {
+        machineSensorService.saveMachineSensor(machineSensor);
         return R.ok();
     }
 
@@ -69,9 +66,9 @@ public class MachineSensorController {
      * 修改
      */
     @RequestMapping("/update")
-  //  @RequiresPermissions("manage:machinesensor:update")
-    public R update(@RequestBody MachineSensorEntity machineSensor){
-		machineSensorService.updateById(machineSensor);
+    //  @RequiresPermissions("manage:machinesensor:update")
+    public R update(@RequestBody MachineSensorEntity machineSensor) {
+        machineSensorService.updateById(machineSensor);
 
         return R.ok();
     }
@@ -81,7 +78,7 @@ public class MachineSensorController {
      */
     @RequestMapping("/update/status")
     //  @RequiresPermissions("manage:machinesensor:update")
-    public R updateStatus(@RequestBody MachineSensorEntity machineSensor){
+    public R updateStatus(@RequestBody MachineSensorEntity machineSensor) {
         machineSensorService.updateById(machineSensor);
 
         return R.ok();
@@ -91,9 +88,9 @@ public class MachineSensorController {
      * 删除
      */
     @RequestMapping("/delete")
-  //  @RequiresPermissions("manage:machinesensor:delete")
-    public R delete(@RequestBody Long[] ids){
-		machineSensorService.removeByIds(Arrays.asList(ids));
+    //  @RequiresPermissions("manage:machinesensor:delete")
+    public R delete(@RequestBody Long[] ids) {
+        machineSensorService.removeByIds(Arrays.asList(ids));
 
         return R.ok();
     }

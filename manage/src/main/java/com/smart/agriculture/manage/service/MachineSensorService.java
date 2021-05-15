@@ -7,14 +7,15 @@ import com.smart.agriculture.manage.entity.MachineSensorEntity;
 import java.util.Map;
 
 /**
- * 
- *
  * @author Evan
- * @email 
+ * @email
  * @date 2021-04-29 14:22:58
  */
 public interface MachineSensorService extends IService<MachineSensorEntity> {
 
     PageUtils queryPage(Map<String, Object> params);
+
+
+    Integer saveMachineSensor(MachineSensorEntity machineSensorEntity);
 }
 

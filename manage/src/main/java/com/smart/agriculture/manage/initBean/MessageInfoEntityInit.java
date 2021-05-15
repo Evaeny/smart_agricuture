@@ -37,34 +37,34 @@ public class MessageInfoEntityInit implements InitializingBean {
     public void afterPropertiesSet() throws Exception {
         logger.info("----初始化系统参数开始---------------start");
         MessageInfoEntity messageInfoEntity = new MessageInfoEntity();
-        messageInfoEntity.setMachinename("自贡汽车总站");
-        messageInfoEntity.setMessagetype("接口连接");
-        messageInfoEntity.setMachineid("Asc02396");
+        messageInfoEntity.setMachineName("自贡汽车总站");
+        messageInfoEntity.setMessageType("接口连接");
+        messageInfoEntity.setMachineId("Asc02396");
 
         MessageInfoEntity messageInfoEntity2 = new MessageInfoEntity();
-        messageInfoEntity2.setMachinename("自贡汽车总站");
-        messageInfoEntity2.setMessagetype("接口断开");
-        messageInfoEntity2.setMachineid("Asc02396");
+        messageInfoEntity2.setMachineName("自贡汽车总站");
+        messageInfoEntity2.setMessageType("接口断开");
+        messageInfoEntity2.setMachineId("Asc02396");
 
         MessageInfoEntity messageInfoEntity3 = new MessageInfoEntity();
-        messageInfoEntity3.setMachinename("武汉汽车总站");
-        messageInfoEntity3.setMessagetype("接口连接");
-        messageInfoEntity3.setMachineid("Asc13588");
+        messageInfoEntity3.setMachineName("武汉汽车总站");
+        messageInfoEntity3.setMessageType("接口连接");
+        messageInfoEntity3.setMachineId("Asc13588");
 
         MessageInfoEntity messageInfoEntity4 = new MessageInfoEntity();
-        messageInfoEntity4.setMachinename("武汉汽车总站");
-        messageInfoEntity4.setMessagetype("接口连接");
-        messageInfoEntity4.setMachineid("Asc13588");
+        messageInfoEntity4.setMachineName("武汉汽车总站");
+        messageInfoEntity4.setMessageType("接口连接");
+        messageInfoEntity4.setMachineId("Asc13588");
 
         MessageInfoEntity messageInfoEntity5 = new MessageInfoEntity();
-        messageInfoEntity5.setMachinename("南京汽车总站");
-        messageInfoEntity5.setMessagetype("接口连接");
-        messageInfoEntity5.setMachineid("Asc60234");
+        messageInfoEntity5.setMachineName("南京汽车总站");
+        messageInfoEntity5.setMessageType("接口连接");
+        messageInfoEntity5.setMachineId("Asc60234");
 
         MessageInfoEntity messageInfoEntity6 = new MessageInfoEntity();
-        messageInfoEntity6.setMachinename("南京汽车总站");
-        messageInfoEntity6.setMessagetype("接口断开");
-        messageInfoEntity6.setMachineid("Asc60234");
+        messageInfoEntity6.setMachineName("南京汽车总站");
+        messageInfoEntity6.setMessageType("接口断开");
+        messageInfoEntity6.setMachineId("Asc60234");
 
         map.put("1", messageInfoEntity);
         map.put("2", messageInfoEntity2);

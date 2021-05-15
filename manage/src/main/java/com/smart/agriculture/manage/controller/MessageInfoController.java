@@ -1,6 +1,7 @@
 package com.smart.agriculture.manage.controller;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.Map;
 
 //import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -60,6 +61,7 @@ public class MessageInfoController {
     @RequestMapping("/save")
  //   @RequiresPermissions("manage:messageinfo:save")
     public R save(@RequestBody MessageInfoEntity messageInfo){
+        messageInfo.setCreatTime(new Date());
 		messageInfoService.save(messageInfo);
 
         return R.ok();

@@ -3,31 +3,32 @@
     :title="!dataForm.id ? '新增' : '修改'"
     :close-on-click-modal="false"
     :visible.sync="visible">
-    <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" label-width="140px">
-    <el-form-item label="启用状态（默认为不启用）" prop="enablestatus">
-      <el-input v-model="dataForm.enablestatus" placeholder="启用状态（默认为不启用）"></el-input>
-    </el-form-item>
-    <el-form-item label="单位" prop="unit">
-      <el-input v-model="dataForm.unit" placeholder="单位"></el-input>
-    </el-form-item>
-    <el-form-item label="策略设定最小值" prop="numberMin">
-      <el-input v-model="dataForm.numberMin" placeholder="策略设定最小值"></el-input>
-    </el-form-item>
-    <el-form-item label="策略设定最大值" prop="numberMax">
-      <el-input v-model="dataForm.numberMax" placeholder="策略设定最大值"></el-input>
-    </el-form-item>
-    <el-form-item label="设备通道" prop="channel">
-      <el-input v-model="dataForm.channel" placeholder="设备通道"></el-input>
-    </el-form-item>
-    <el-form-item label="设备类型" prop="machineType">
-      <el-input v-model="dataForm.machineType" placeholder="设备类型"></el-input>
-    </el-form-item>
-    <el-form-item label="设备名称" prop="machineName">
-      <el-input v-model="dataForm.machineName" placeholder="设备名称"></el-input>
-    </el-form-item>
-    <el-form-item label="设备编号" prop="machineId">
-      <el-input v-model="dataForm.machineId" placeholder="设备编号"></el-input>
-    </el-form-item>
+    <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()"
+             label-width="140px">
+      <el-form-item label="启用状态" prop="enablestatus">
+        <el-input v-model="dataForm.enablestatus" placeholder="启用状态"></el-input>
+      </el-form-item>
+      <el-form-item label="单位" prop="unit">
+        <el-input v-model="dataForm.unit" placeholder="单位"></el-input>
+      </el-form-item>
+      <el-form-item label="策略设定最小值" prop="numberMin">
+        <el-input v-model="dataForm.numberMin" placeholder="策略设定最小值"></el-input>
+      </el-form-item>
+      <el-form-item label="策略设定最大值" prop="numberMax">
+        <el-input v-model="dataForm.numberMax" placeholder="策略设定最大值"></el-input>
+      </el-form-item>
+      <el-form-item label="设备通道" prop="channel">
+        <el-input v-model="dataForm.channel" placeholder="设备通道"></el-input>
+      </el-form-item>
+      <el-form-item label="设备类型" prop="machineType">
+        <el-input v-model="dataForm.machineType" placeholder="设备类型"></el-input>
+      </el-form-item>
+      <el-form-item label="设备名称" prop="machineName">
+        <el-input v-model="dataForm.machineName" placeholder="设备名称"></el-input>
+      </el-form-item>
+      <el-form-item label="设备编号" prop="machineId">
+        <el-input v-model="dataForm.machineId" placeholder="设备编号"></el-input>
+      </el-form-item>
     </el-form>
     <span slot="footer" class="dialog-footer">
       <el-button @click="visible = false">取消</el-button>
@@ -38,7 +39,7 @@
 
 <script>
   export default {
-    data () {
+    data() {
       return {
         visible: false,
         dataForm: {
@@ -54,34 +55,34 @@
         },
         dataRule: {
           enablestatus: [
-            { required: true, message: '启用状态（默认为不启用）不能为空', trigger: 'blur' }
+            {required: true, message: '启用状态（默认为不启用）不能为空', trigger: 'blur'}
           ],
           unit: [
-            { required: true, message: '单位不能为空', trigger: 'blur' }
+            {required: true, message: '单位不能为空', trigger: 'blur'}
           ],
           numberMin: [
-            { required: true, message: '策略设定最小值不能为空', trigger: 'blur' }
+            {required: true, message: '策略设定最小值不能为空', trigger: 'blur'}
           ],
           numberMax: [
-            { required: true, message: '策略设定最大值不能为空', trigger: 'blur' }
+            {required: true, message: '策略设定最大值不能为空', trigger: 'blur'}
           ],
           channel: [
-            { required: true, message: '设备通道不能为空', trigger: 'blur' }
+            {required: true, message: '设备通道不能为空', trigger: 'blur'}
           ],
           machineType: [
-            { required: true, message: '设备类型不能为空', trigger: 'blur' }
+            {required: true, message: '设备类型不能为空', trigger: 'blur'}
           ],
           machineName: [
-            { required: true, message: '设备名称不能为空', trigger: 'blur' }
+            {required: true, message: '设备名称不能为空', trigger: 'blur'}
           ],
           machineId: [
-            { required: true, message: '设备编号不能为空', trigger: 'blur' }
+            {required: true, message: '设备编号不能为空', trigger: 'blur'}
           ],
         }
       }
     },
     methods: {
-      init (id) {
+      init(id) {
         this.dataForm.id = id || 0
         this.visible = true
         this.$nextTick(() => {
@@ -107,7 +108,7 @@
         })
       },
       // 表单提交
-      dataFormSubmit () {
+      dataFormSubmit() {
         this.$refs['dataForm'].validate((valid) => {
           if (valid) {
             this.$http({

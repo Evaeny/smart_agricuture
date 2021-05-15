@@ -28,22 +28,22 @@ public class MessageInfoEntity implements Serializable {
 	/**
 	 * 消息类型
 	 */
-	private String messagetype;
+	private String messageType;
 	/**
 	 * 设备id
 	 */
-	private String machineid;
+	private String machineId;
 	/**
 	 * 设备名称
 	 */
-	private String machinename;
+	private String machineName;
 	/**
 	 * 接收时间
 	 */
-	private Date creattime;
+	private Date creatTime;
 	/**
 	 * 存在标识符
 	 */
-	private String deletyn;
+	private String deletYn;
 
 }

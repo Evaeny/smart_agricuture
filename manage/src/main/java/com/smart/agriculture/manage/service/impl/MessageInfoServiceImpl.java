@@ -21,10 +21,9 @@ public class MessageInfoServiceImpl extends ServiceImpl<MessageInfoDao, MessageI
     public PageUtils queryPage(Map<String, Object> params) {
         QueryWrapper<MessageInfoEntity> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq(!StringUtils.isEmpty(params.get("machineType")), "machine_type", params.get("machineType"));
-        queryWrapper.eq(!StringUtils.isEmpty(params.get("channel")), "channel", params.get("channel"));
         queryWrapper.eq(!StringUtils.isEmpty(params.get("machineId")), "machine_id", params.get("machineId"));
         queryWrapper.like(!StringUtils.isEmpty(params.get("machineName")), "machine_name", params.get("machineName"));
-        queryWrapper.orderByDesc("creatTime");
+        queryWrapper.orderByDesc("creat_time");
         IPage<MessageInfoEntity> page = this.page(
                 new Query<MessageInfoEntity>().getPage(params),
                 queryWrapper

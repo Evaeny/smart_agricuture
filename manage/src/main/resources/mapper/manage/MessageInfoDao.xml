@@ -6,11 +6,11 @@
 	<!-- 可根据自己的需求，是否要使用 -->
     <resultMap type="com.smart.agriculture.manage.entity.MessageInfoEntity" id="messageInfoMap">
         <result property="id" column="id"/>
-        <result property="messagetype" column="messageType"/>
-        <result property="machineid" column="machineId"/>
-        <result property="machinename" column="machineName"/>
-        <result property="creattime" column="creatTime"/>
-        <result property="deletyn" column="deletYn"/>
+        <result property="messageType" column="message_type"/>
+        <result property="machineId" column="machine_id"/>
+        <result property="machineName" column="machine_name"/>
+        <result property="creatTime" column="creat_time"/>
+        <result property="deletYn" column="delet_yn"/>
     </resultMap>
 
 

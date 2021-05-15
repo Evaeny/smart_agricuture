@@ -50,25 +50,25 @@
         label="序号">
       </el-table-column>
       <el-table-column
-        prop="messagetype"
+        prop="messageType"
         header-align="center"
         align="center"
         label="消息类型">
       </el-table-column>
       <el-table-column
-        prop="machineid"
+        prop="machineId"
         header-align="center"
         align="center"
         label="来源设备编号">
       </el-table-column>
       <el-table-column
-        prop="machinename"
+        prop="machineName"
         header-align="center"
         align="center"
         label="来源设备名称">
       </el-table-column>
       <el-table-column
-        prop="creattime"
+        prop="creatTime"
         header-align="center"
         align="center"
         label="接收时间">
@@ -113,7 +113,8 @@
         totalPage: 0,
         dataListLoading: false,
         dataListSelections: [],
-        addOrUpdateVisible: false
+        addOrUpdateVisible: false,
+        intervalId: null
       }
     },
     components: {
@@ -199,7 +200,27 @@
             }
           })
         })
+      },
+      dataRefresh() {
+        if (this.intervalId != null) {
+          return;
+        }
+
+        this.intervalId = setInterval(() => {
+          console.log("刷新" + new Date());
+          this.getDataList();
+        }, 5000)
+      },
+      clear() {
+        clearInterval(this.intervalId);
+        this.intervalId = null;
       }
+    },
+    created() {
+      this.dataRefresh();
+    },
+    destroyed() {
+      this.clear();
     }
   }
 </script>

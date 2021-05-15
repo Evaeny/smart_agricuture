@@ -23,7 +23,7 @@ public class PolicyManagementEntity implements Serializable {
 	/**
 	 * 启用状态（默认为不启用）
 	 */
-	private String enablestatus;
+	private String enableStatus;
 	/**
 	 * 单位
 	 */
@@ -31,11 +31,11 @@ public class PolicyManagementEntity implements Serializable {
 	/**
 	 * 策略设定最小值
 	 */
-	private String numbermin;
+	private String numberMin;
 	/**
 	 * 策略设定最大值
 	 */
-	private String numbermax;
+	private String numberMax;
 	/**
 	 * 设备通道
 	 */
@@ -43,15 +43,15 @@ public class PolicyManagementEntity implements Serializable {
 	/**
 	 * 设备类型
 	 */
-	private String machinetype;
+	private String machineType;
 	/**
 	 * 设备名称
 	 */
-	private String machinename;
+	private String machineName;
 	/**
 	 * 设备编号
 	 */
-	private String machineid;
+	private String machineId;
 	/**
 	 * 主键id
 	 */

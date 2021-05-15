@@ -2,15 +2,47 @@
   <div class="mod-config">
     <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()">
       <el-form-item>
-        <el-input v-model="dataForm.key" placeholder="参数名" clearable></el-input>
+        <el-form-item label="来源设备编号">
+          <el-input v-model="dataForm.machineId" placeholder="来源设备编号" clearable></el-input>
+        </el-form-item>
+        <el-form-item label="来源设备名称">
+          <el-input v-model="dataForm.machineName" placeholder="来源设备名称" clearable></el-input>
+        </el-form-item>
+        <el-form-item label="设备通道">
+          <el-select v-model="dataForm.channel" placeholder="请选择设备通道" clearable>
+            <el-option
+              v-for="item in channelList"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="设备类型">
+          <el-select v-model="dataForm.machineType" disabled clearable>
+            <el-option
+              v-for="item in machineTypeList"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="接收时间">
+          <el-col :span="8">
+            <el-date-picker type="date" placeholder="开始时间" v-model="dataForm.startTime"
+                            style="width: 100%;"></el-date-picker>
+          </el-col>
+          <el-col :span="8" style="padding-left: 10px">
+            <el-date-picker type="date" placeholder="结束时间" v-model="dataForm.endTime"
+                            style="width: 100%;"></el-date-picker>
+          </el-col>
+        </el-form-item>
       </el-form-item>
       <el-form-item>
         <el-button @click="getDataList()">查询</el-button>
-        <el-button type="primary" @click="addOrUpdateHandle()">新增
-        </el-button>
-        <el-button type="danger" @click="deleteHandle()"
-                   :disabled="dataListSelections.length <= 0">批量删除
-        </el-button>
+        <el-button type="primary" @click="addOrUpdateHandle()">新增</el-button>
+        <el-button type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
       </el-form-item>
     </el-form>
     <el-table
@@ -41,7 +73,7 @@
         prop="conditionNumber"
         header-align="center"
         align="center"
-        label="风速">
+        label="土壤温度">
       </el-table-column>
       <el-table-column
         prop="unit"
@@ -100,7 +132,7 @@
     data() {
       return {
         dataForm: {
-          key: ''
+          machineType: 'd'
         },
         dataList: [],
         pageIndex: 1,
@@ -108,7 +140,41 @@
         totalPage: 0,
         dataListLoading: false,
         dataListSelections: [],
-        addOrUpdateVisible: false
+        addOrUpdateVisible: false,
+        channelList: [{
+          value: 'a',
+          label: 'a'
+        }, {
+          value: 'b',
+          label: 'b'
+        }, {
+          value: 'c',
+          label: 'c'
+        }, {
+          value: 'd',
+          label: 'd'
+        }],
+        machineTypeList: [
+          {
+            value: 'a',
+            label: '土壤温度传感器'
+          }, {
+            value: 'b',
+            label: '土壤湿度传感器'
+          }, {
+            value: 'c',
+            label: '空气湿度传感器'
+          }, {
+            value: 'd',
+            label: '风速传感器'
+          }, {
+            value: 'e',
+            label: '光照传感器'
+          }, {
+            value: 'f',
+            label: 'CO2浓度传感器'
+          }
+        ],
       }
     },
     components: {
@@ -120,14 +186,19 @@
     methods: {
       // 获取数据列表
       getDataList() {
-        this.dataListLoading = true
+        this.dataListLoading = true;
         this.$http({
           url: this.$http.adornUrl('/manage/machinesensor/list'),
           method: 'get',
           params: this.$http.adornParams({
             'page': this.pageIndex,
             'limit': this.pageSize,
-            'key': this.dataForm.key
+            'machineType': this.dataForm.machineType,
+            'machineId': this.dataForm.machineId,
+            'machineName': this.dataForm.machineName,
+            'channel': this.dataForm.channel,
+            'startTime': this.dataForm.startTime,
+            'endTime': this.dataForm.endTime
           })
         }).then(({data}) => {
           if (data && data.code === 0) {
@@ -166,7 +237,7 @@
       deleteHandle(id) {
         var ids = id ? [id] : this.dataListSelections.map(item => {
           return item.id
-        })
+        });
         this.$confirm(`确定对[id=${ids.join(',')}]进行[${id ? '删除' : '批量删除'}]操作?`, '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
