@@ -8,7 +8,6 @@ import com.smart.agriculture.manage.entity.MachineControllerEntity;
 import com.smart.agriculture.manage.entity.MachineSensorEntity;
 import com.smart.agriculture.manage.entity.MessageInfoEntity;
 import com.smart.agriculture.manage.entity.PolicyManagementEntity;
-import com.smart.agriculture.manage.initBean.MessageInfoEntityInit;
 import com.smart.agriculture.manage.service.MachineControllerService;
 import com.smart.agriculture.manage.service.MachineSensorService;
 import com.smart.agriculture.manage.service.MessageInfoService;
@@ -64,7 +63,7 @@ public class MessageInfoTask {
             Integer randomInt = RandomUtil.randomInt(0, 100);
             MachineSensorEntity sensorEntity = machineConverter.controllerToSensor(item);
             sensorEntity.setConditionNumber(randomInt);
-
+            machineSensorService.saveMachineSensor(sensorEntity);
 
             String controllerId = item.getMachineId();
             LambdaQueryWrapper<PolicyManagementEntity> policyQueryWrapper = new LambdaQueryWrapper<>();
@@ -74,15 +73,26 @@ public class MessageInfoTask {
                 for (PolicyManagementEntity policyItem : policyList) {
                     Integer numberMin = policyItem.getNumberMin();
                     Integer numberMax = policyItem.getNumberMax();
+                    if (randomInt > numberMax || randomInt < numberMin) {
+                        MessageInfoEntity messageInfoEntity = new MessageInfoEntity();
+                        messageInfoEntity.setMachineId(item.getMachineId());
+                        messageInfoEntity.setMachineName(item.getMachineName());
+                        messageInfoEntity.setMessageType("数据异常");
+                        messageInfoEntity.setCreatTime(new Date());
+                        messageInfoEntity.setDeletYn("1");
+                        messageInfoService.save(messageInfoEntity);
+
+                        MessageInfoEntity messageInfoEntity2 = new MessageInfoEntity();
+                        messageInfoEntity2.setMachineId(policyItem.getMachineId());
+                        messageInfoEntity2.setMachineName(policyItem.getMachineName());
+                        messageInfoEntity2.setMessageType("控制器修复");
+                        messageInfoEntity2.setCreatTime(new Date());
+                        messageInfoEntity2.setDeletYn("1");
+                        messageInfoService.save(messageInfoEntity2);
+                    }
                 }
             }
 
         }
-
-
-        MessageInfoEntity messageInfoEntity = MessageInfoEntityInit.map.get(randomEle);
-        messageInfoEntity.setDeletYn("1");
-        messageInfoEntity.setCreatTime(new Date());
-        messageInfoService.save(messageInfoEntity);
     }
 }

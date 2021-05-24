@@ -69,21 +69,15 @@
         label="设备类型">
       </el-table-column>
       <el-table-column
-        prop="unit"
-        header-align="center"
-        align="center"
-        label="单位">
-      </el-table-column>
-      <el-table-column
         prop="channel"
         header-align="center"
         align="center"
         label="设备通道">
       </el-table-column>
-      <el-table-column prop="presetStatus" header-align="center" align="center" label="启用状态">
+      <el-table-column prop="machineStatus" header-align="center" align="center" label="启用状态">
         <template slot-scope="scope">
           <el-switch
-            v-model="scope.row.presetStatus"
+            v-model="scope.row.machineStatus"
             active-color="#13ce66"
             inactive-color="#ff4949"
             active-value="1"
@@ -119,7 +113,7 @@
 </template>
 
 <script>
-  import AddOrUpdate from './machinecontroller-add-or-update'
+  import AddOrUpdate from './machineinfo-add-or-update'
 
   export default {
     data() {
@@ -181,7 +175,7 @@
       getDataList() {
         this.dataListLoading = true
         this.$http({
-          url: this.$http.adornUrl('/manage/machinecontroller/list'),
+          url: this.$http.adornUrl('/manage/machineinfo/list'),
           method: 'get',
           params: this.$http.adornParams({
             'page': this.pageIndex,
@@ -193,10 +187,10 @@
           })
         }).then(({data}) => {
           if (data && data.code === 0) {
-            this.dataList = data.page.list
-            this.totalPage = data.page.totalCount
+            this.dataList = data.page.list;
+            this.totalPage = data.page.totalCount;
           } else {
-            this.dataList = []
+            this.dataList = [];
             this.totalPage = 0
           }
           this.dataListLoading = false
@@ -204,13 +198,13 @@
       },
       // 每页数
       sizeChangeHandle(val) {
-        this.pageSize = val
-        this.pageIndex = 1
+        this.pageSize = val;
+        this.pageIndex = 1;
         this.getDataList()
       },
       // 当前页
       currentChangeHandle(val) {
-        this.pageIndex = val
+        this.pageIndex = val;
         this.getDataList()
       },
       // 多选
@@ -219,7 +213,7 @@
       },
       // 新增 / 修改
       addOrUpdateHandle(id) {
-        this.addOrUpdateVisible = true
+        this.addOrUpdateVisible = true;
         this.$nextTick(() => {
           this.$refs.addOrUpdate.init(id)
         })
@@ -228,14 +222,14 @@
       deleteHandle(id) {
         var ids = id ? [id] : this.dataListSelections.map(item => {
           return item.id
-        })
+        });
         this.$confirm(`确定对[id=${ids.join(',')}]进行[${id ? '删除' : '批量删除'}]操作?`, '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
           this.$http({
-            url: this.$http.adornUrl('/manage/machinecontroller/delete'),
+            url: this.$http.adornUrl('/manage/machineinfo/delete'),
             method: 'post',
             data: this.$http.adornData(ids, false)
           }).then(({data}) => {
@@ -257,12 +251,12 @@
       // 修改显示状态
       updatepresetStatus(data) {
         // console.log("最新信息", data);
-        let {id, presetStatus} = data;
+        let {id, machineStatus} = data;
         //发送请求修改状态
         this.$http({
-          url: this.$http.adornUrl("/manage/machinecontroller/update/status"),
+          url: this.$http.adornUrl("/manage/machineinfo/update/status"),
           method: "post",
-          data: this.$http.adornData({id, presetStatus}, false)
+          data: this.$http.adornData({id, machineStatus}, false)
         }).then(({data}) => {
           this.$message({
             type: "success",

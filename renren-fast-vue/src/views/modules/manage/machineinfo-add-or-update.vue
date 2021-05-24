@@ -11,12 +11,6 @@
       <el-form-item label="设备名称" prop="machineName">
         <el-input v-model="dataForm.machineName" placeholder="设备名称"></el-input>
       </el-form-item>
-      <el-form-item label="设定数值" prop="presetNumber">
-        <el-input v-model="dataForm.presetNumber" placeholder="设定数值"></el-input>
-      </el-form-item>
-      <el-form-item label="单位" prop="unit">
-        <el-input v-model="dataForm.unit" placeholder="单位"></el-input>
-      </el-form-item>
       <el-form-item label="设备通道" prop="channel">
         <el-select v-model="dataForm.channel" placeholder="请选择设备通道" clearable>
           <el-option
@@ -27,9 +21,9 @@
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="设定启用状态" prop="presetStatus">
+      <el-form-item label="设定启用状态" prop="machineStatus">
         <el-switch
-          v-model="dataForm.presetStatus"
+          v-model="dataForm.machineStatus"
           active-color="#13ce66"
           inactive-color="#ff4949"
           active-value="1"
@@ -62,10 +56,8 @@
         dataForm: {
           id: 0,
           machineName: '',
-          presetNumber: '',
-          unit: '',
           channel: '',
-          presetStatus: '',
+          machineStatus: '',
           machineType: '',
           machineId: ''
         },
@@ -73,16 +65,10 @@
           machineName: [
             {required: true, message: '设备名称不能为空', trigger: 'blur'}
           ],
-          presetNumber: [
-            {required: true, message: '设定数值不能为空', trigger: 'blur'}
-          ],
-          unit: [
-            {required: true, message: '单位不能为空', trigger: 'blur'}
-          ],
           channel: [
             {required: true, message: '设备通道不能为空', trigger: 'blur'}
           ],
-          presetStatus: [
+          machineStatus: [
             {required: true, message: '设定启用状态不能为空', trigger: 'blur'}
           ],
           machineType: [
@@ -136,16 +122,14 @@
           this.$refs['dataForm'].resetFields()
           if (this.dataForm.id) {
             this.$http({
-              url: this.$http.adornUrl(`/manage/machinecontroller/info/${this.dataForm.id}`),
+              url: this.$http.adornUrl(`/manage/machineinfo/info/${this.dataForm.id}`),
               method: 'get',
               params: this.$http.adornParams()
             }).then(({data}) => {
               if (data && data.code === 0) {
                 this.dataForm.machineName = data.machineController.machineName
-                this.dataForm.presetNumber = data.machineController.presetNumber
-                this.dataForm.unit = data.machineController.unit
                 this.dataForm.channel = data.machineController.channel
-                this.dataForm.presetStatus = data.machineController.presetStatus
+                this.dataForm.machineStatus = data.machineController.machineStatus
                 this.dataForm.machineType = data.machineController.machineType
                 this.dataForm.machineId = data.machineController.machineId
               }
@@ -158,15 +142,13 @@
         this.$refs['dataForm'].validate((valid) => {
           if (valid) {
             this.$http({
-              url: this.$http.adornUrl(`/manage/machinecontroller/${!this.dataForm.id ? 'save' : 'update'}`),
+              url: this.$http.adornUrl(`/manage/machineinfo/${!this.dataForm.id ? 'save' : 'update'}`),
               method: 'post',
               data: this.$http.adornData({
                 'id': this.dataForm.id || undefined,
                 'machineName': this.dataForm.machineName,
-                'presetNumber': this.dataForm.presetNumber,
-                'unit': this.dataForm.unit,
                 'channel': this.dataForm.channel,
-                'presetStatus': this.dataForm.presetStatus,
+                'machineStatus': this.dataForm.machineStatus,
                 'machineType': this.dataForm.machineType,
                 'machineId': this.dataForm.machineId
               })

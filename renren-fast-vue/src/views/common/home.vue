@@ -9,7 +9,7 @@
             <a @click="$router.push({ name: 'detail' })">李克强称赞中国农民真了不起</a>
           </div>
           <div class="text item">
-            <a @click="$router.push({ name: 'detail' })">李克强称赞中国农民真了不起</a>
+            <a @click="$router.push({ name: 'detail2' })">李克强</a>
           </div>
           <div class="text item">
             <a @click="$router.push({ name: 'detail' })">李克强称赞中国农民真了不起</a>

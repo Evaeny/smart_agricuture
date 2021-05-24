@@ -6,6 +6,7 @@ import com.smart.agriculture.manage.entity.MachineInfoEntity;
 import com.smart.agriculture.manage.service.MachineInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -83,4 +84,13 @@ public class MachineInfoController {
         return R.ok();
     }
 
+    /**
+     * 修改
+     */
+    @PostMapping("/update/status")
+    //  @RequiresPermissions("manage:machinecontroller:update")
+    public R updateStatus(@RequestBody MachineInfoEntity machineInfo) {
+        machineInfoService.updateById(machineInfo);
+        return R.ok();
+    }
 }
