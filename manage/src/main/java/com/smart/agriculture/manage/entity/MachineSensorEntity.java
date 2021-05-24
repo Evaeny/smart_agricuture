@@ -21,7 +21,7 @@ public class MachineSensorEntity implements Serializable {
     /**
      * 条件数值
      */
-    private String conditionNumber;
+    private Integer conditionNumber;
     /**
      * 记录时间
      */

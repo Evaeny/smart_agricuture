@@ -2,14 +2,39 @@
   <div class="mod-config">
     <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()">
       <el-form-item>
-        <el-input v-model="dataForm.key" placeholder="参数名" clearable></el-input>
+        <el-form-item>
+          <el-form-item label="设备编号">
+            <el-input v-model="dataForm.machineId" placeholder="设备编号" clearable></el-input>
+          </el-form-item>
+          <el-form-item label="设备名称">
+            <el-input v-model="dataForm.machineName" placeholder="设备名称" clearable></el-input>
+          </el-form-item>
+          <el-form-item label="设备通道">
+            <el-select v-model="dataForm.channel" placeholder="请选择设备通道" clearable>
+              <el-option
+                v-for="item in channelList"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="设备类型">
+            <el-select v-model="dataForm.machineType" placeholder="请选择设备通道" clearable>
+              <el-option
+                v-for="item in machineTypeList"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select>
+          </el-form-item>
+        </el-form-item>
       </el-form-item>
       <el-form-item>
         <el-button @click="getDataList()">查询</el-button>
-        <el-button  type="primary" @click="addOrUpdateHandle()">新增</el-button>
-        <el-button  type="danger" @click="deleteHandle()"
-                   :disabled="dataListSelections.length <= 0">批量删除
-        </el-button>
+        <el-button type="primary" @click="addOrUpdateHandle()">新增设备</el-button>
+        <el-button type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
       </el-form-item>
     </el-form>
     <el-table
@@ -25,40 +50,47 @@
         width="50">
       </el-table-column>
       <el-table-column
-        prop="channel"
+        prop="machineId"
         header-align="center"
         align="center"
-        label="设备通道">
+        label="设备编号">
       </el-table-column>
       <el-table-column
-        prop="id"
-        header-align="center"
-        align="center"
-        label="主键id">
-      </el-table-column>
-      <el-table-column
-        prop="machinename"
+        prop="machineName"
         header-align="center"
         align="center"
         label="设备名称">
       </el-table-column>
       <el-table-column
-        prop="machinetype"
+        prop="machineType"
         header-align="center"
         align="center"
+        :formatter="formatterMachineType"
         label="设备类型">
       </el-table-column>
       <el-table-column
-        prop="machinestatus"
+        prop="unit"
         header-align="center"
         align="center"
-        label="设备启用状态（默认为不启用）">
+        label="单位">
       </el-table-column>
       <el-table-column
-        prop="machineid"
+        prop="channel"
         header-align="center"
         align="center"
-        label="设备编号">
+        label="设备通道">
+      </el-table-column>
+      <el-table-column prop="presetStatus" header-align="center" align="center" label="启用状态">
+        <template slot-scope="scope">
+          <el-switch
+            v-model="scope.row.presetStatus"
+            active-color="#13ce66"
+            inactive-color="#ff4949"
+            active-value="1"
+            inactive-value="0"
+            @change="updatepresetStatus(scope.row)"
+          ></el-switch>
+        </template>
       </el-table-column>
       <el-table-column
         fixed="right"
@@ -87,7 +119,7 @@
 </template>
 
 <script>
-  import AddOrUpdate from './machineinfo-add-or-update'
+  import AddOrUpdate from './machinecontroller-add-or-update'
 
   export default {
     data() {
@@ -96,6 +128,40 @@
           key: ''
         },
         dataList: [],
+        channelList: [{
+          value: 'a',
+          label: 'a'
+        }, {
+          value: 'b',
+          label: 'b'
+        }, {
+          value: 'c',
+          label: 'c'
+        }, {
+          value: 'd',
+          label: 'd'
+        }],
+        machineTypeList: [
+          {
+            value: 'a',
+            label: '土壤温度控制器'
+          }, {
+            value: 'b',
+            label: '土壤加湿器'
+          }, {
+            value: 'c',
+            label: '空气加湿器'
+          }, {
+            value: 'd',
+            label: '挡风板'
+          }, {
+            value: 'e',
+            label: '遮光板-补光灯'
+          }, {
+            value: 'f',
+            label: 'CO2浓度控制器'
+          }
+        ],
         pageIndex: 1,
         pageSize: 10,
         totalPage: 0,
@@ -115,12 +181,15 @@
       getDataList() {
         this.dataListLoading = true
         this.$http({
-          url: this.$http.adornUrl('/manage/machineinfo/list'),
+          url: this.$http.adornUrl('/manage/machinecontroller/list'),
           method: 'get',
           params: this.$http.adornParams({
             'page': this.pageIndex,
             'limit': this.pageSize,
-            'key': this.dataForm.key
+            'machineType': this.dataForm.machineType,
+            'machineId': this.dataForm.machineId,
+            'machineName': this.dataForm.machineName,
+            'channel': this.dataForm.channel
           })
         }).then(({data}) => {
           if (data && data.code === 0) {
@@ -166,7 +235,7 @@
           type: 'warning'
         }).then(() => {
           this.$http({
-            url: this.$http.adornUrl('/manage/machineinfo/delete'),
+            url: this.$http.adornUrl('/manage/machinecontroller/delete'),
             method: 'post',
             data: this.$http.adornData(ids, false)
           }).then(({data}) => {
@@ -184,6 +253,45 @@
             }
           })
         })
+      },
+      // 修改显示状态
+      updatepresetStatus(data) {
+        // console.log("最新信息", data);
+        let {id, presetStatus} = data;
+        //发送请求修改状态
+        this.$http({
+          url: this.$http.adornUrl("/manage/machinecontroller/update/status"),
+          method: "post",
+          data: this.$http.adornData({id, presetStatus}, false)
+        }).then(({data}) => {
+          this.$message({
+            type: "success",
+            message: "状态更新成功"
+          });
+        }).catch(() => {
+        });
+
+      },
+      formatterMachineType(row, column) {
+        let machineType = row[column.property];
+        switch (machineType) {
+          case 'a':
+            return '土壤温度控制器';
+          case 'b':
+            return '土壤加湿器';
+          case 'c':
+            return '空气加湿器';
+          case 'd':
+            return '挡风板';
+          case 'e':
+            return '遮光板-补光灯';
+
+          case 'f':
+            return 'CO2浓度控制器';
+
+          default :
+            return '';
+        }
       }
     }
   }

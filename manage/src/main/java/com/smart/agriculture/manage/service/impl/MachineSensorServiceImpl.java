@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.smart.agriculture.common.utils.PageUtils;
 import com.smart.agriculture.common.utils.Query;
-import com.smart.agriculture.manage.converter.MachineSensorConverter;
+import com.smart.agriculture.manage.converter.MachineConverter;
 import com.smart.agriculture.manage.dao.MachineSensorDao;
 import com.smart.agriculture.manage.entity.MachineSensorEntity;
 import com.smart.agriculture.manage.entity.PolicyManagementEntity;
@@ -27,7 +27,7 @@ public class MachineSensorServiceImpl extends ServiceImpl<MachineSensorDao, Mach
     private PolicyManagementService policyManagementService;
 
     @Autowired
-    private MachineSensorConverter machineSensorConverter;
+    private MachineConverter machineSensorConverter;
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {

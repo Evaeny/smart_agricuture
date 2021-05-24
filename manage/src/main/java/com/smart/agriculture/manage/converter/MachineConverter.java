@@ -1,6 +1,7 @@
 package com.smart.agriculture.manage.converter;
 
 
+import com.smart.agriculture.manage.entity.MachineControllerEntity;
 import com.smart.agriculture.manage.entity.MachineSensorEntity;
 import com.smart.agriculture.manage.entity.PolicyManagementEntity;
 import org.mapstruct.Mapper;
@@ -8,7 +9,7 @@ import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
 
 /**
- * ClassName: MachineSensorConverter
+ * ClassName: MachineConverter
  * Description:
  * date: 2021/5/13 9:46
  *
@@ -16,11 +17,16 @@ import org.mapstruct.Mappings;
  */
 
 @Mapper(componentModel = "spring")
-public interface MachineSensorConverter {
+public interface MachineConverter {
 
 
     @Mappings(
             @Mapping(target = "id", ignore = true)
     )
     PolicyManagementEntity sensorToPolicy(MachineSensorEntity machineSensorEntity);
+
+    @Mappings(
+            @Mapping(target = "id", ignore = true)
+    )
+    MachineSensorEntity controllerToSensor(MachineControllerEntity machineControllerEntity);
 }
