@@ -22,7 +22,10 @@ public class MachineInfoServiceImpl extends ServiceImpl<MachineInfoDao, MachineI
         QueryWrapper<MachineInfoEntity> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq(!StringUtils.isEmpty(params.get("machineType")), "machine_type", params.get("machineType"));
         queryWrapper.eq(!StringUtils.isEmpty(params.get("channel")), "channel", params.get("channel"));
+
         queryWrapper.eq(!StringUtils.isEmpty(params.get("machineId")), "machine_id", params.get("machineId"));
+
+
         queryWrapper.like(!StringUtils.isEmpty(params.get("machineName")), "machine_name", params.get("machineName"));
         IPage<MachineInfoEntity> page = this.page(
                 new Query<MachineInfoEntity>().getPage(params),

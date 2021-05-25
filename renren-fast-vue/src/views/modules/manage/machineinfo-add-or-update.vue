@@ -146,11 +146,11 @@
               params: this.$http.adornParams()
             }).then(({data}) => {
               if (data && data.code === 0) {
-                this.dataForm.machineName = data.machineInfo.machineName
-                this.dataForm.channel = data.machineInfo.channel
-                this.dataForm.machineStatus = data.machineInfo.machineStatus
-                this.dataForm.machineType = data.machineInfo.machineType
-                this.dataForm.machineId = data.machineInfo.machineId
+                this.dataForm.machineName = data.machineInfo.machineName;
+                this.dataForm.channel = data.machineInfo.channel;
+                this.dataForm.machineStatus = data.machineInfo.machineStatus;
+                this.dataForm.machineType = data.machineInfo.machineType;
+                this.dataForm.machineId = data.machineInfo.machineId;
               }
             })
           }
