@@ -58,7 +58,6 @@ public class MachineInfoController {
     //   @RequiresPermissions("manage:machineinfo:save")
     public R save(@RequestBody MachineInfoEntity machineInfo) {
         machineInfoService.save(machineInfo);
-
         return R.ok();
     }
 

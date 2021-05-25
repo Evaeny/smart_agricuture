@@ -28,11 +28,11 @@ public class PolicyManagementEntity implements Serializable {
     /**
      * 策略设定最小值
      */
-    private Integer numberMin;
+    private Double numberMin;
     /**
      * 策略设定最大值
      */
-    private Integer numberMax;
+    private Double numberMax;
     /**
      * 设备通道
      */

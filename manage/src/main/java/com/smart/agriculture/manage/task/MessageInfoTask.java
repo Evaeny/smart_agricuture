@@ -15,6 +15,7 @@ import com.smart.agriculture.manage.service.PolicyManagementService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 
+import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
@@ -44,7 +45,7 @@ public class MessageInfoTask {
     @Autowired
     private MachineConverter machineConverter;
 
-    private static String[] machineNameList = new String[]{"1", "2", "3", "4", "5", "6"};
+    private static String[] typeList = new String[]{"a", "b", "c", "d", "e", "f"};
 
     //3.添加定时任务
     @Scheduled(cron = "0/5 * * * * ?")
@@ -52,17 +53,18 @@ public class MessageInfoTask {
     //@Scheduled(fixedRate=5000)
     public void configureTasks() {
         System.out.println("执行消息中心定时任务时间: " + LocalDateTime.now());
-        String randomEle = RandomUtil.randomEle(machineNameList);
         LambdaQueryWrapper<MachineControllerEntity> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.in(MachineControllerEntity::getMachineType, typeList);
         queryWrapper.eq(MachineControllerEntity::getPresetStatus, true);
         // 1.查询所有启用状态的设备
         List<MachineControllerEntity> machineList = machineControllerService.list(queryWrapper);
 
         for (MachineControllerEntity item : machineList) {
             // 2.生成随机数
-            Integer randomInt = RandomUtil.randomInt(0, 100);
+            Double randomDouble = RandomUtil.randomDouble(0, 100, 2, RoundingMode.HALF_UP);
+
             MachineSensorEntity sensorEntity = machineConverter.controllerToSensor(item);
-            sensorEntity.setConditionNumber(randomInt);
+            sensorEntity.setConditionNumber(randomDouble);
             machineSensorService.saveMachineSensor(sensorEntity);
 
             String controllerId = item.getMachineId();
@@ -71,9 +73,9 @@ public class MessageInfoTask {
             List<PolicyManagementEntity> policyList = policyManagementService.list(policyQueryWrapper);
             if (!CollectionUtils.isEmpty(policyList)) {
                 for (PolicyManagementEntity policyItem : policyList) {
-                    Integer numberMin = policyItem.getNumberMin();
-                    Integer numberMax = policyItem.getNumberMax();
-                    if (randomInt > numberMax || randomInt < numberMin) {
+                    Double numberMin = policyItem.getNumberMin();
+                    Double numberMax = policyItem.getNumberMax();
+                    if (randomDouble > numberMax || randomDouble < numberMin) {
                         MessageInfoEntity messageInfoEntity = new MessageInfoEntity();
                         messageInfoEntity.setMachineId(item.getMachineId());
                         messageInfoEntity.setMachineName(item.getMachineName());
