@@ -81,21 +81,40 @@
         machineTypeList: [
           {
             value: 'a',
-            label: '土壤温度控制器'
+            label: '土壤温度传感器'
           }, {
             value: 'b',
-            label: '土壤加湿器'
+            label: '土壤湿度传感器'
           }, {
             value: 'c',
-            label: '空气加湿器'
+            label: '空气湿度传感器'
           }, {
             value: 'd',
-            label: '挡风板'
+            label: '风速传感器'
           }, {
             value: 'e',
-            label: '遮光板-补光灯'
+            label: '光照传感器'
           }, {
             value: 'f',
+            label: 'CO2浓度传感器'
+          },
+          {
+            value: 'g',
+            label: '土壤温度控制器'
+          }, {
+            value: 'h',
+            label: '土壤加湿器'
+          }, {
+            value: 'i',
+            label: '空气加湿器'
+          }, {
+            value: 'j',
+            label: '挡风板'
+          }, {
+            value: 'k',
+            label: '遮光板-补光灯'
+          }, {
+            value: 'l',
             label: 'CO2浓度控制器'
           }
         ],
@@ -127,11 +146,11 @@
               params: this.$http.adornParams()
             }).then(({data}) => {
               if (data && data.code === 0) {
-                this.dataForm.machineName = data.machineController.machineName
-                this.dataForm.channel = data.machineController.channel
-                this.dataForm.machineStatus = data.machineController.machineStatus
-                this.dataForm.machineType = data.machineController.machineType
-                this.dataForm.machineId = data.machineController.machineId
+                this.dataForm.machineName = data.machineInfo.machineName
+                this.dataForm.channel = data.machineInfo.channel
+                this.dataForm.machineStatus = data.machineInfo.machineStatus
+                this.dataForm.machineType = data.machineInfo.machineType
+                this.dataForm.machineId = data.machineInfo.machineId
               }
             })
           }
