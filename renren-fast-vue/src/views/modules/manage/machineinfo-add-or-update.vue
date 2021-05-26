@@ -6,13 +6,13 @@
     <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()"
              label-width="140px">
       <el-form-item label="设备编号" prop="machineId">
-        <el-input v-model="dataForm.machineId" placeholder="设备编号"></el-input>
+        <el-input v-model="dataForm.machineId" :disabled="dataForm.id" placeholder="设备编号"></el-input>
       </el-form-item>
       <el-form-item label="设备名称" prop="machineName">
         <el-input v-model="dataForm.machineName" placeholder="设备名称"></el-input>
       </el-form-item>
       <el-form-item label="设备通道" prop="channel">
-        <el-select v-model="dataForm.channel" placeholder="请选择设备通道" clearable>
+        <el-select v-model="dataForm.channel" :disabled="dataForm.id" placeholder="请选择设备通道" clearable>
           <el-option
             v-for="item in channelList"
             :key="item.value"
@@ -31,7 +31,7 @@
         ></el-switch>
       </el-form-item>
       <el-form-item label="设备类型" prop="machineType">
-        <el-select v-model="dataForm.machineType" placeholder="请选择设备通道" clearable>
+        <el-select v-model="dataForm.machineType" :disabled="dataForm.id" placeholder="请选择设备通道" clearable>
           <el-option
             v-for="item in machineTypeList"
             :key="item.value"
