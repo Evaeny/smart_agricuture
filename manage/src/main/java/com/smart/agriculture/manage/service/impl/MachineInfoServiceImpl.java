@@ -6,20 +6,16 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.smart.agriculture.common.utils.PageUtils;
 import com.smart.agriculture.common.utils.Query;
-import com.smart.agriculture.manage.dao.MachineControllerDao;
-import com.smart.agriculture.manage.dao.MachineInfoDao;
-import com.smart.agriculture.manage.dao.MachineSensorDao;
-import com.smart.agriculture.manage.dao.PolicyManagementDao;
-import com.smart.agriculture.manage.entity.MachineControllerEntity;
-import com.smart.agriculture.manage.entity.MachineInfoEntity;
-import com.smart.agriculture.manage.entity.MachineSensorEntity;
-import com.smart.agriculture.manage.entity.PolicyManagementEntity;
+import com.smart.agriculture.manage.dao.*;
+import com.smart.agriculture.manage.entity.*;
 import com.smart.agriculture.manage.service.MachineInfoService;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -36,6 +32,9 @@ public class MachineInfoServiceImpl extends ServiceImpl<MachineInfoDao, MachineI
 
     @Autowired
     private MachineSensorDao machineSensorDao;
+
+    @Autowired
+    private MessageInfoDao messageInfoDao;
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
@@ -87,6 +86,13 @@ public class MachineInfoServiceImpl extends ServiceImpl<MachineInfoDao, MachineI
                 machineControllerEntity.setPresetStatus(machineInfoEntity.getMachineStatus());
                 machineControllerEntity.setUnit(machineInfoEntity.getUnit());
                 machineControllerDao.insert(machineControllerEntity);
+                MessageInfoEntity messageInfoEntity = new MessageInfoEntity();
+                messageInfoEntity.setDeletYn("1");
+                messageInfoEntity.setMachineId(machineInfoEntity.getMachineId());
+                messageInfoEntity.setMachineName(machineInfoEntity.getMachineName());
+                messageInfoEntity.setMessageType("设备添加");
+                messageInfoEntity.setCreatTime(new Date());
+                messageInfoDao.insert(messageInfoEntity);
             }
         }
         return iscuss;
@@ -134,5 +140,25 @@ public class MachineInfoServiceImpl extends ServiceImpl<MachineInfoDao, MachineI
         return iscuss;
     }
 
-
+    @Override
+    public Boolean updateName(MachineInfoEntity machineInfoEntity) {
+        LambdaQueryWrapper<MachineControllerEntity> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(MachineControllerEntity::getMachineId, machineInfoEntity.getMachineId())
+                .eq(MachineControllerEntity::getMachineType, machineInfoEntity.getMachineType());
+        MachineControllerEntity machineControllerEntity = machineControllerDao.selectOne(queryWrapper);
+        if (!StringUtils.isEmpty(queryWrapper)) {
+            machineControllerEntity.setMachineName(machineInfoEntity.getMachineName());
+            machineControllerDao.updateById(machineControllerEntity);
+        }
+        LambdaQueryWrapper<PolicyManagementEntity> queryWrapper2 = new LambdaQueryWrapper<>();
+        queryWrapper2.eq(PolicyManagementEntity::getMachineId, machineInfoEntity.getMachineId())
+                .eq(PolicyManagementEntity::getMachineType, machineInfoEntity.getMachineType());
+        PolicyManagementEntity policyManagementEntity = policyManagementDao.selectOne(queryWrapper2);
+        if (!StringUtils.isEmpty(queryWrapper2)){
+            policyManagementEntity.setMachineName(machineInfoEntity.getMachineName());
+            policyManagementDao.updateById(policyManagementEntity);
+        }
+        Boolean iscuss = this.baseMapper.updateById(machineInfoEntity) > 0;
+        return iscuss;
+    }
 }

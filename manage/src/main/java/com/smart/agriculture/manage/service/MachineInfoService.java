@@ -34,5 +34,10 @@ public interface MachineInfoService extends IService<MachineInfoEntity> {
      * 状态更改
      */
     Boolean updateStatus (MachineInfoEntity machineInfoEntity);
+
+    /**
+     * 修改名称
+     */
+    Boolean updateName (MachineInfoEntity machineInfoEntity);
 }
 

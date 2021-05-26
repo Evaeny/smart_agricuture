@@ -2,6 +2,7 @@ package com.smart.agriculture.manage.controller;
 
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 //import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -20,10 +21,10 @@ import com.smart.agriculture.common.utils.R;
 
 
 /**
- * 
+ *
  *
  * @author Evan
- * @email 
+ * @email
  * @date 2021-04-29 14:22:58
  */
 @RestController
@@ -38,9 +39,9 @@ public class MessageInfoController {
     @RequestMapping("/list")
   //  @RequiresPermissions("manage:messageinfo:list")
     public R list(@RequestParam Map<String, Object> params){
-        PageUtils page = messageInfoService.queryPage(params);
+        PageUtils messagePage = messageInfoService.selectListInfo(params);
 
-        return R.ok().put("page", page);
+        return R.ok().put("page", messagePage);
     }
 
 
@@ -84,7 +85,7 @@ public class MessageInfoController {
     @RequestMapping("/delete")
   //  @RequiresPermissions("manage:messageinfo:delete")
     public R delete(@RequestBody Long[] ids){
-		messageInfoService.removeByIds(Arrays.asList(ids));
+		messageInfoService.deleteMessageInfo(ids);
 
         return R.ok();
     }

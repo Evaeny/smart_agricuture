@@ -66,7 +66,7 @@ public class MachineInfoController {
     @RequestMapping("/update")
     //  @RequiresPermissions("manage:machineinfo:update")
     public R update(@RequestBody MachineInfoEntity machineInfo) {
-        machineInfoService.updateById(machineInfo);
+        machineInfoService.updateName(machineInfo);
         return R.ok();
     }
 
