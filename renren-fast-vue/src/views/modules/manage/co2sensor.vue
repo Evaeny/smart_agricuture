@@ -125,13 +125,13 @@
 </template>
 
 <script>
-  import AddOrUpdate from './lightintensitysensor-add-or-update'
+  import AddOrUpdate from './co2sensor-add-or-update'
 
   export default {
     data() {
       return {
         dataForm: {
-          machineType: 'e'
+          machineType: 'f'
         },
         dataList: [],
         pageIndex: 1,
