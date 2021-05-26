@@ -95,4 +95,13 @@ public class MachineSensorController {
         return R.ok();
     }
 
+    /**
+     * 删除
+     */
+    @RequestMapping("/query/{machineId}")
+    public R query(@PathVariable("machineId") String machineId) throws Exception {
+        MachineSensorEntity sensorEntity = machineSensorService.saveMachineSensor(machineId);
+        return R.ok().put("machineSensor", sensorEntity);
+    }
+
 }
