@@ -2,6 +2,7 @@ package com.smart.agriculture.manage.converter;
 
 
 import com.smart.agriculture.manage.entity.MachineControllerEntity;
+import com.smart.agriculture.manage.entity.MachineInfoEntity;
 import com.smart.agriculture.manage.entity.MachineSensorEntity;
 import com.smart.agriculture.manage.entity.PolicyManagementEntity;
 import org.mapstruct.Mapper;
@@ -29,4 +30,10 @@ public interface MachineConverter {
             @Mapping(target = "id", ignore = true)
     )
     MachineSensorEntity controllerToSensor(MachineControllerEntity machineControllerEntity);
+
+    @Mappings(
+            @Mapping(target = "id", ignore = true)
+    )
+    MachineSensorEntity infoToSensor(MachineInfoEntity machineInfoEntity);
+
 }

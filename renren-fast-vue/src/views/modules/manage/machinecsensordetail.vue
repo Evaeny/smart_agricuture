@@ -80,14 +80,14 @@
     },
     methods: {
 
-      init(id) {
-        this.dataForm.id = id || 0;
+      init(machineId) {
+        this.dataForm.machineId = machineId || 0;
         this.visible = true;
         this.$nextTick(() => {
           this.$refs['dataForm'].resetFields();
-          if (this.dataForm.id) {
+          if (this.dataForm.machineId) {
             this.$http({
-              url: this.$http.adornUrl(`/manage/machinesensor/info/${this.dataForm.id}`),
+              url: this.$http.adornUrl(`/manage/machinesensor/query/${this.dataForm.machineId}`),
               method: 'get',
               params: this.$http.adornParams()
             }).then(({data}) => {
@@ -96,7 +96,6 @@
                 this.dataForm.conditionNumber = data.machineSensor.conditionNumber;
                 this.dataForm.unit = data.machineSensor.unit;
                 this.dataForm.channel = data.machineSensor.channel;
-                this.dataForm.enableStatus = data.machineSensor.enableStatus;
                 this.dataForm.machineType = data.machineSensor.machineType;
                 this.dataForm.machineId = data.machineSensor.machineId;
                 this.dataForm.machineType = this.transMachineType(data.machineSensor.machineType);

@@ -67,28 +67,10 @@
         label="设备类型">
       </el-table-column>
       <el-table-column
-        prop="unit"
-        header-align="center"
-        align="center"
-        label="单位">
-      </el-table-column>
-      <el-table-column
         prop="channel"
         header-align="center"
         align="center"
         label="设备通道">
-      </el-table-column>
-      <el-table-column prop="enableStatus" header-align="center" align="center" label="启用状态">
-        <template slot-scope="scope">
-          <el-switch
-            v-model="scope.row.enableStatus"
-            active-color="#13ce66"
-            inactive-color="#ff4949"
-            active-value="1"
-            inactive-value="0"
-            @change="updatepresetStatus(scope.row)"
-          ></el-switch>
-        </template>
       </el-table-column>
       <el-table-column
         fixed="right"
@@ -97,7 +79,7 @@
         width="150"
         label="操作">
         <template slot-scope="scope">
-          <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">查询</el-button>
+          <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.machineId)">查询</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -178,7 +160,7 @@
       getDataList() {
         this.dataListLoading = true
         this.$http({
-          url: this.$http.adornUrl('/manage/machinesensor/list'),
+          url: this.$http.adornUrl('/manage/machineinfo/list'),
           method: 'get',
           params: this.$http.adornParams({
             'page': this.pageIndex,
@@ -215,10 +197,10 @@
         this.dataListSelections = val
       },
       // 新增 / 修改
-      addOrUpdateHandle(id) {
+      addOrUpdateHandle(machineId) {
         this.addOrUpdateVisible = true
         this.$nextTick(() => {
-          this.$refs.addOrUpdate.init(id)
+          this.$refs.addOrUpdate.init(machineId)
         })
       },
       // 删除
@@ -250,24 +232,6 @@
             }
           })
         })
-      },
-      // 修改显示状态
-      updatepresetStatus(data) {
-        // console.log("最新信息", data);
-        let {id, enableStatus} = data;
-        //发送请求修改状态
-        this.$http({
-          url: this.$http.adornUrl("/manage/machinesensor/update/status"),
-          method: "post",
-          data: this.$http.adornData({id, enableStatus}, false)
-        }).then(({data}) => {
-          this.$message({
-            type: "success",
-            message: "状态更新成功"
-          });
-        }).catch(() => {
-        });
-
       },
       formatterMachineType(row, column) {
         let machineType = row[column.property];

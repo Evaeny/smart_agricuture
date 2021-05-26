@@ -17,5 +17,7 @@ public interface MachineSensorService extends IService<MachineSensorEntity> {
 
 
     Integer saveMachineSensor(MachineSensorEntity machineSensorEntity);
+
+    MachineSensorEntity saveMachineSensor(String machineId) throws Exception;
 }
 
