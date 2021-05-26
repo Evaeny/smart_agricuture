@@ -9,10 +9,10 @@ import java.util.Date;
 import lombok.Data;
 
 /**
- * 
- * 
+ *
+ *
  * @author Evan
- * @email 
+ * @email
  * @date 2021-04-29 14:22:58
  */
 @Data
@@ -44,6 +44,6 @@ public class MessageInfoEntity implements Serializable {
 	/**
 	 * 存在标识符
 	 */
-	private String deletYn;
+	private String deleteYn;
 
 }

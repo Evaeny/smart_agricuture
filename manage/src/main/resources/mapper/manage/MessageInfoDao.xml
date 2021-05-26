@@ -10,7 +10,7 @@
         <result property="machineId" column="machine_id"/>
         <result property="machineName" column="machine_name"/>
         <result property="creatTime" column="creat_time"/>
-        <result property="deletYn" column="delet_yn"/>
+        <result property="deleteYn" column="delete_yn"/>
     </resultMap>
 
 

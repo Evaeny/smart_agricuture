@@ -82,6 +82,13 @@ public class MachineInfoServiceImpl extends ServiceImpl<MachineInfoDao, MachineI
         int insert = this.baseMapper.insert(machineInfoEntity);
         Boolean iscuss = insert > 0;
         if (iscuss) {
+            MessageInfoEntity messageInfoEntity = new MessageInfoEntity();
+            messageInfoEntity.setDeletYn("1");
+            messageInfoEntity.setMachineId(machineInfoEntity.getMachineId());
+            messageInfoEntity.setMachineName(machineInfoEntity.getMachineName());
+            messageInfoEntity.setMessageType("设备添加");
+            messageInfoEntity.setCreatTime(new Date());
+            messageInfoDao.insert(messageInfoEntity);
             if (("g").equals(machineInfoEntity.getMachineType()) || ("h").equals(machineInfoEntity.getMachineType()) ||
                     ("i").equals(machineInfoEntity.getMachineType()) || ("j").equals(machineInfoEntity.getMachineType()) ||
                     ("k").equals(machineInfoEntity.getMachineType()) || ("l").equals(machineInfoEntity.getMachineType())) {
@@ -93,13 +100,6 @@ public class MachineInfoServiceImpl extends ServiceImpl<MachineInfoDao, MachineI
                 machineControllerEntity.setPresetStatus(machineInfoEntity.getMachineStatus());
                 machineControllerEntity.setUnit(machineInfoEntity.getUnit());
                 machineControllerDao.insert(machineControllerEntity);
-                MessageInfoEntity messageInfoEntity = new MessageInfoEntity();
-                messageInfoEntity.setDeletYn("1");
-                messageInfoEntity.setMachineId(machineInfoEntity.getMachineId());
-                messageInfoEntity.setMachineName(machineInfoEntity.getMachineName());
-                messageInfoEntity.setMessageType("设备添加");
-                messageInfoEntity.setCreatTime(new Date());
-                messageInfoDao.insert(messageInfoEntity);
             }
         }
         return iscuss;

@@ -56,7 +56,7 @@ public class MessageInfoServiceImpl extends ServiceImpl<MessageInfoDao, MessageI
         queryWrapper.in(MessageInfoEntity::getId, ids);
         List<MessageInfoEntity> entityList = this.baseMapper.selectList(queryWrapper);
         for (MessageInfoEntity messageInfoEntity : entityList) {
-                messageInfoEntity.setDeletYn("0");
+                messageInfoEntity.setDeleteYn("0");
                   this.updateById(messageInfoEntity);
         }
         return true;
