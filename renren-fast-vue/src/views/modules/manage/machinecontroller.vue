@@ -160,6 +160,14 @@
           }, {
             value: 'f',
             label: 'CO2浓度控制器'
+          },
+           {
+            value: 'g',
+            label: '土壤温度传感器'
+          }
+          , {
+            value: 'h',
+            label: 'CO2浓度传感器'
           }
         ],
         pageIndex: 1,

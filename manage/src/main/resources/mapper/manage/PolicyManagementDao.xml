@@ -13,6 +13,7 @@
         <result property="machinetype" column="machineType"/>
         <result property="machinename" column="machineName"/>
         <result property="machineid" column="machineId"/>
+        <result property="betweensensorid" column="betweensensorid"/>
         <result property="id" column="id"/>
     </resultMap>
 

@@ -20,10 +20,10 @@ import com.smart.agriculture.common.utils.R;
 
 
 /**
- * 
+ *
  *
  * @author Evan
- * @email 
+ * @email
  * @date 2021-04-29 14:22:58
  */
 @RestController
@@ -62,7 +62,6 @@ public class MachineControllerController {
  //   @RequiresPermissions("manage:machinecontroller:save")
     public R save(@RequestBody MachineControllerEntity machineController){
 		machineControllerService.save(machineController);
-
         return R.ok();
     }
 
@@ -73,7 +72,6 @@ public class MachineControllerController {
   //  @RequiresPermissions("manage:machinecontroller:update")
     public R update(@RequestBody MachineControllerEntity machineController){
 		machineControllerService.updateById(machineController);
-
         return R.ok();
     }
 

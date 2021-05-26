@@ -55,10 +55,9 @@ public class MachineInfoController {
      * 保存
      */
     @RequestMapping("/save")
-    //   @RequiresPermissions("manage:machineinfo:save")
-    public R save(@RequestBody MachineInfoEntity machineInfo) {
-        machineInfoService.save(machineInfo);
-        return R.ok();
+    public R save(@RequestBody MachineInfoEntity machineInfoEntity) throws Exception {
+        Boolean iscuss = machineInfoService.saveMachineInfo(machineInfoEntity);
+        return R.ok().put("成功",iscuss);
     }
 
     /**
@@ -68,7 +67,6 @@ public class MachineInfoController {
     //  @RequiresPermissions("manage:machineinfo:update")
     public R update(@RequestBody MachineInfoEntity machineInfo) {
         machineInfoService.updateById(machineInfo);
-
         return R.ok();
     }
 
@@ -78,8 +76,7 @@ public class MachineInfoController {
     @RequestMapping("/delete")
     //  @RequiresPermissions("manage:machineinfo:delete")
     public R delete(@RequestBody Long[] ids) {
-        machineInfoService.removeByIds(Arrays.asList(ids));
-
+        machineInfoService.deleteMachineInfo(ids);
         return R.ok();
     }
 
@@ -88,8 +85,8 @@ public class MachineInfoController {
      */
     @PostMapping("/update/status")
     //  @RequiresPermissions("manage:machinecontroller:update")
-    public R updateStatus(@RequestBody MachineInfoEntity machineInfo) {
-        machineInfoService.updateById(machineInfo);
+    public R updateStatus(@RequestBody MachineInfoEntity machineInfoEntity) {
+        machineInfoService.updateStatus(machineInfoEntity);
         return R.ok();
     }
 }
