@@ -123,21 +123,40 @@
         machineTypeList: [
           {
             value: 'a',
-            label: '土壤温度控制器'
+            label: '土壤温度传感器'
           }, {
             value: 'b',
-            label: '土壤加湿器'
+            label: '土壤湿度传感器'
           }, {
             value: 'c',
-            label: '空气加湿器'
+            label: '空气湿度传感器'
           }, {
             value: 'd',
-            label: '挡风板'
+            label: '风速传感器'
           }, {
             value: 'e',
-            label: '遮光板-补光灯'
+            label: '光照传感器'
           }, {
             value: 'f',
+            label: 'CO2浓度传感器'
+          },
+          {
+            value: 'g',
+            label: '土壤温度控制器'
+          }, {
+            value: 'h',
+            label: '土壤加湿器'
+          }, {
+            value: 'i',
+            label: '空气加湿器'
+          }, {
+            value: 'j',
+            label: '挡风板'
+          }, {
+            value: 'k',
+            label: '遮光板-补光灯'
+          }, {
+            value: 'l',
             label: 'CO2浓度控制器'
           }
         ],
@@ -158,7 +177,11 @@
     methods: {
       // 获取数据列表
       getDataList() {
-        this.dataListLoading = true
+        this.dataListLoading = true;
+        let machineSensor = 0;
+        if (this.dataForm.machineType) {
+          machineSensor = 1
+        }
         this.$http({
           url: this.$http.adornUrl('/manage/machineinfo/list'),
           method: 'get',
@@ -168,7 +191,8 @@
             'machineType': this.dataForm.machineType,
             'machineId': this.dataForm.machineId,
             'machineName': this.dataForm.machineName,
-            'channel': this.dataForm.channel
+            'channel': this.dataForm.channel,
+            'machineSensor': machineSensor
           })
         }).then(({data}) => {
           if (data && data.code === 0) {
@@ -237,19 +261,36 @@
         let machineType = row[column.property];
         switch (machineType) {
           case 'a':
-            return '土壤温度控制器';
+            return '土壤温度传感器';
           case 'b':
-            return '土壤加湿器';
+            return '土壤湿度传感器';
           case 'c':
-            return '空气加湿器';
+            return '空气湿度传感器';
           case 'd':
-            return '挡风板';
+            return '风速传感器';
           case 'e':
-            return '遮光板-补光灯';
+            return '光照传感器';
 
           case 'f':
-            return 'CO2浓度控制器';
+            return 'CO2浓度传感器';
 
+          case 'g':
+            return '土壤温度控制器';
+
+          case 'h':
+            return '土壤加湿器';
+
+          case 'i':
+            return '空气加湿器';
+
+          case 'j':
+            return '挡风板';
+
+          case 'k':
+            return '遮光板-补光灯';
+
+          case 'l':
+            return 'CO2浓度控制器';
           default :
             return '';
         }

@@ -19,8 +19,15 @@ public class MachineInfoServiceImpl extends ServiceImpl<MachineInfoDao, MachineI
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
+        String machineSensor = (String) params.get("machineSensor");
         QueryWrapper<MachineInfoEntity> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq(!StringUtils.isEmpty(params.get("machineType")), "machine_type", params.get("machineType"));
+        if (!StringUtils.isEmpty(machineSensor) && "0".equals(machineSensor)) {
+            queryWrapper.in("machine_type", "a", "b", "c", "d", "e", "f");
+        }
+        else {
+            queryWrapper.eq(!StringUtils.isEmpty(params.get("machineType")), "machine_type", params.get("machineType"));
+        }
+
         queryWrapper.eq(!StringUtils.isEmpty(params.get("channel")), "channel", params.get("channel"));
 
         queryWrapper.eq(!StringUtils.isEmpty(params.get("machineId")), "machine_id", params.get("machineId"));
