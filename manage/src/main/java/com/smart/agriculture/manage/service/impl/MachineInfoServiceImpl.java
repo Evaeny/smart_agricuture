@@ -83,7 +83,7 @@ public class MachineInfoServiceImpl extends ServiceImpl<MachineInfoDao, MachineI
         Boolean iscuss = insert > 0;
         if (iscuss) {
             MessageInfoEntity messageInfoEntity = new MessageInfoEntity();
-            messageInfoEntity.setDeletYn("1");
+            messageInfoEntity.setDeleteYn("1");
             messageInfoEntity.setMachineId(machineInfoEntity.getMachineId());
             messageInfoEntity.setMachineName(machineInfoEntity.getMachineName());
             messageInfoEntity.setMessageType("设备添加");
@@ -128,14 +128,17 @@ public class MachineInfoServiceImpl extends ServiceImpl<MachineInfoDao, MachineI
         LambdaQueryWrapper<MachineInfoEntity> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(MachineInfoEntity::getId, machineInfoEntity.getId());
         MachineInfoEntity machineInfoEntity1 = this.baseMapper.selectOne(queryWrapper);
-        if (("a").equals(machineInfoEntity1.getMachineType()) || ("b").equals(machineInfoEntity1.getMachineType()) || ("c").equals(machineInfoEntity1.getMachineType()) || ("d").equals(machineInfoEntity1.getMachineType()) || ("e").equals(machineInfoEntity1.getMachineType()) || ("f").equals(machineInfoEntity1.getMachineType())) {
-            LambdaQueryWrapper<MachineSensorEntity> queryWrapper1 = new LambdaQueryWrapper<>();
-            queryWrapper1.eq(MachineSensorEntity::getMachineId, machineInfoEntity1.getMachineId())
-                    .eq(MachineSensorEntity::getMachineType, machineInfoEntity1.getMachineType());
-            MachineSensorEntity machineSensorEntity = machineSensorDao.selectOne(queryWrapper1);
-            machineSensorEntity.setEnableStatus(machineInfoEntity.getMachineStatus());
-            machineSensorDao.updateById(machineSensorEntity);
-        } else if (("g").equals(machineInfoEntity1.getMachineType()) || ("h").equals(machineInfoEntity1.getMachineType()) || ("i").equals(machineInfoEntity1.getMachineType()) || ("j").equals(machineInfoEntity1.getMachineType()) || ("k").equals(machineInfoEntity1.getMachineType()) || ("l").equals(machineInfoEntity1.getMachineType())) {
+//        if (("a").equals(machineInfoEntity1.getMachineType()) || ("b").equals(machineInfoEntity1.getMachineType()) || ("c").equals(machineInfoEntity1.getMachineType()) || ("d").equals(machineInfoEntity1.getMachineType()) || ("e").equals(machineInfoEntity1.getMachineType()) || ("f").equals(machineInfoEntity1.getMachineType())) {
+//            LambdaQueryWrapper<MachineSensorEntity> queryWrapper1 = new LambdaQueryWrapper<>();
+//            queryWrapper1.eq(MachineSensorEntity::getMachineId, machineInfoEntity1.getMachineId())
+//                    .eq(MachineSensorEntity::getMachineType, machineInfoEntity1.getMachineType());
+//            MachineSensorEntity machineSensorEntity = machineSensorDao.selectOne(queryWrapper1);
+//            if (!StringUtils.isEmpty(machineSensorEntity)) {
+//                machineSensorEntity.setEnableStatus(machineInfoEntity.getMachineStatus());
+//                machineSensorDao.updateById(machineSensorEntity);
+//            }
+//        }else
+            if (("g").equals(machineInfoEntity1.getMachineType()) || ("h").equals(machineInfoEntity1.getMachineType()) || ("i").equals(machineInfoEntity1.getMachineType()) || ("j").equals(machineInfoEntity1.getMachineType()) || ("k").equals(machineInfoEntity1.getMachineType()) || ("l").equals(machineInfoEntity1.getMachineType())) {
             LambdaQueryWrapper<MachineControllerEntity> queryWrapper2 = new LambdaQueryWrapper<>();
             queryWrapper2.eq(MachineControllerEntity::getMachineId, machineInfoEntity1.getMachineId())
                     .eq(MachineControllerEntity::getMachineType, machineInfoEntity1.getMachineType());
@@ -161,7 +164,7 @@ public class MachineInfoServiceImpl extends ServiceImpl<MachineInfoDao, MachineI
         queryWrapper2.eq(PolicyManagementEntity::getMachineId, machineInfoEntity.getMachineId())
                 .eq(PolicyManagementEntity::getMachineType, machineInfoEntity.getMachineType());
         PolicyManagementEntity policyManagementEntity = policyManagementDao.selectOne(queryWrapper2);
-        if (!StringUtils.isEmpty(queryWrapper2)){
+        if (!StringUtils.isEmpty(policyManagementEntity)){
             policyManagementEntity.setMachineName(machineInfoEntity.getMachineName());
             policyManagementDao.updateById(policyManagementEntity);
         }

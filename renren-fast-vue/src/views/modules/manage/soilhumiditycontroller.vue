@@ -85,8 +85,8 @@
             v-model="scope.row.presetStatus"
             active-color="#13ce66"
             inactive-color="#ff4949"
-            :active-value="1"
-            :inactive-value="0"
+            active-value="1"
+            inactive-value="0"
             @change="updatepresetStatus(scope.row)"
           ></el-switch>
         </template>
@@ -124,7 +124,7 @@
     data() {
       return {
         dataForm: {
-          machineType: 'b'
+          machineType: 'h'
         },
         dataList: [],
         channelList: [{
@@ -139,6 +139,24 @@
         }, {
           value: 'd',
           label: 'd'
+        },{
+          value: 'e',
+          label: 'e'
+        },{
+          value: 'f',
+          label: 'f'
+        },{
+          value: 'g',
+          label: 'g'
+        },{
+          value: 'h',
+          label: 'h'
+        },{
+          value: 'i',
+          label: 'i'
+        },{
+          value: 'j',
+          label: 'j'
         }],
         machineTypeList: [
           {

@@ -140,6 +140,24 @@
         }, {
           value: 'd',
           label: 'd'
+        },{
+          value: 'e',
+          label: 'e'
+        },{
+          value: 'f',
+          label: 'f'
+        },{
+          value: 'g',
+          label: 'g'
+        },{
+          value: 'h',
+          label: 'h'
+        },{
+          value: 'i',
+          label: 'i'
+        },{
+          value: 'j',
+          label: 'j'
         }],
         machineTypeList: [
           {

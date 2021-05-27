@@ -81,7 +81,7 @@ public class MachineControllerController {
     @PostMapping("/update/status")
     //  @RequiresPermissions("manage:machinecontroller:update")
     public R updateStatus(@RequestBody MachineControllerEntity machineController){
-        machineControllerService.updateById(machineController);
+        machineControllerService.updateStatus(machineController);
 
         return R.ok();
     }
@@ -91,8 +91,8 @@ public class MachineControllerController {
      */
     @RequestMapping("/delete")
   //  @RequiresPermissions("manage:machinecontroller:delete")
-    public R delete(@RequestBody Integer[] ids){
-		machineControllerService.removeByIds(Arrays.asList(ids));
+    public R delete(@RequestBody Long[] ids){
+		machineControllerService.deleteMachineController(ids);
 
         return R.ok();
     }

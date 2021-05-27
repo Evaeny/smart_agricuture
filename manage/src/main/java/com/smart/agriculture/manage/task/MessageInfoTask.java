@@ -81,7 +81,7 @@ public class MessageInfoTask {
                         messageInfoEntity.setMachineName(item.getMachineName());
                         messageInfoEntity.setMessageType("数据异常");
                         messageInfoEntity.setCreatTime(new Date());
-                        messageInfoEntity.setDeletYn("1");
+                        messageInfoEntity.setDeleteYn("1");
                         messageInfoService.save(messageInfoEntity);
 
                         MessageInfoEntity messageInfoEntity2 = new MessageInfoEntity();
@@ -89,7 +89,7 @@ public class MessageInfoTask {
                         messageInfoEntity2.setMachineName(policyItem.getMachineName());
                         messageInfoEntity2.setMessageType("控制器修复");
                         messageInfoEntity2.setCreatTime(new Date());
-                        messageInfoEntity2.setDeletYn("1");
+                        messageInfoEntity2.setDeleteYn("1");
                         messageInfoService.save(messageInfoEntity2);
                     }
                 }
