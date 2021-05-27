@@ -61,6 +61,15 @@ public class MachineInfoServiceImpl extends ServiceImpl<MachineInfoDao, MachineI
     }
 
     @Override
+    public List<MachineInfoEntity> queryAll(Map<String, Object> params) {
+        QueryWrapper<MachineInfoEntity> queryWrapper = new QueryWrapper<>();
+        queryWrapper.in("machine_type", "a", "b", "c", "d", "e", "f");
+        queryWrapper.in("machine_status", true);
+        return this.baseMapper.selectList(queryWrapper);
+    }
+
+}
+    @Override
     public Boolean saveMachineInfo(MachineInfoEntity machineInfoEntity) throws Exception {
         QueryWrapper<MachineInfoEntity> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("machine_id", machineInfoEntity.getMachineId());

@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.smart.agriculture.common.utils.PageUtils;
 import com.smart.agriculture.manage.entity.MachineInfoEntity;
 
+import java.util.List;
 import java.security.GeneralSecurityException;
 import java.util.Map;
 
@@ -17,6 +18,9 @@ import java.util.Map;
 public interface MachineInfoService extends IService<MachineInfoEntity> {
 
     PageUtils queryPage(Map<String, Object> params);
+
+
+    List<MachineInfoEntity> queryAll(Map<String, Object> params);
 
     /**
      * 设备创建

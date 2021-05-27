@@ -3,6 +3,7 @@ package com.smart.agriculture.manage.controller;
 import com.smart.agriculture.common.utils.PageUtils;
 import com.smart.agriculture.common.utils.R;
 import com.smart.agriculture.manage.entity.MachineInfoEntity;
+import com.smart.agriculture.manage.entity.MachineSensorEntity;
 import com.smart.agriculture.manage.service.MachineInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 //import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -88,5 +90,16 @@ public class MachineInfoController {
     public R updateStatus(@RequestBody MachineInfoEntity machineInfoEntity) {
         machineInfoService.updateStatus(machineInfoEntity);
         return R.ok();
+    }
+
+    /**
+     * 列表
+     */
+    @RequestMapping("/queryAll")
+    //  @RequiresPermissions("manage:machinesensor:list")
+    public R queryAll(@RequestParam Map<String, Object> params) {
+        List<MachineInfoEntity> machineSensorEntities = machineInfoService.queryAll(params);
+
+        return R.ok().put("page", machineSensorEntities);
     }
 }
