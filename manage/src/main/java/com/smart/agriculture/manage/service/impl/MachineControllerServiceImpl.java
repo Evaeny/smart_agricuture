@@ -12,12 +12,16 @@ import com.smart.agriculture.manage.dao.PolicyManagementDao;
 import com.smart.agriculture.manage.entity.MachineControllerEntity;
 import com.smart.agriculture.manage.entity.MachineInfoEntity;
 import com.smart.agriculture.manage.entity.PolicyManagementEntity;
+import com.smart.agriculture.manage.entity.MachineInfoEntity;
 import com.smart.agriculture.manage.service.MachineControllerService;
+import org.springframework.beans.factory.annotation.Autowired;
+import com.smart.agriculture.manage.service.MachineInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -25,6 +29,8 @@ import java.util.stream.Collectors;
 
 @Service("machineControllerService")
 public class MachineControllerServiceImpl extends ServiceImpl<MachineControllerDao, MachineControllerEntity> implements MachineControllerService {
+    @Autowired
+    private MachineInfoService machineInfoService;
 
     @Autowired
     private MachineInfoDao machineInfoDao;
@@ -76,6 +82,14 @@ public class MachineControllerServiceImpl extends ServiceImpl<MachineControllerD
         deleteWrapper2.in(PolicyManagementEntity::getMachineId, machineIdList);
         policyManagementDao.delete(deleteWrapper2);
         this.removeByIds(Arrays.asList(ids));
+    }
+
+    @Override
+    public List<MachineInfoEntity> queryAll(Map<String, Object> params) {
+        QueryWrapper<MachineInfoEntity> queryWrapper = new QueryWrapper<>();
+        queryWrapper.in("machine_type", "g", "h", "i", "j", "k", "l");
+        queryWrapper.in("machine_status", true);
+        return machineInfoService.getBaseMapper().selectList(queryWrapper);
     }
 
 }

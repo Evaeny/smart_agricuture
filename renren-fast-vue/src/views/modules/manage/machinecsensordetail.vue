@@ -117,6 +117,8 @@
                 this.dataForm.machineType = data.machineSensor.machineType;
                 this.dataForm.machineId = data.machineSensor.machineId;
                 this.dataForm.machineType = this.transMachineType(data.machineSensor.machineType);
+              }else {
+                this.$message.error(data.msg)
               }
             })
           }

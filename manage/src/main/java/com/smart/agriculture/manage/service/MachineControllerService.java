@@ -3,7 +3,9 @@ package com.smart.agriculture.manage.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.smart.agriculture.common.utils.PageUtils;
 import com.smart.agriculture.manage.entity.MachineControllerEntity;
+import com.smart.agriculture.manage.entity.MachineInfoEntity;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -27,5 +29,7 @@ public interface MachineControllerService extends IService<MachineControllerEnti
      * @return
      */
     void deleteMachineController (Long[] ids);
+
+    List<MachineInfoEntity> queryAll(Map<String, Object> params);
 }
 

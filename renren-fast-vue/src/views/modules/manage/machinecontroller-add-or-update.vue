@@ -6,19 +6,19 @@
     <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()"
              label-width="140px">
       <el-form-item label="设备编号" prop="machineId">
-        <el-input v-model="dataForm.machineId" placeholder="设备编号"></el-input>
+        <el-input v-model="dataForm.machineId" :disabled="dataForm.id" placeholder="设备编号"></el-input>
       </el-form-item>
       <el-form-item label="设备名称" prop="machineName">
-        <el-input v-model="dataForm.machineName" placeholder="设备名称"></el-input>
+        <el-input v-model="dataForm.machineName"  :disabled="dataForm.id" placeholder="设备名称"></el-input>
       </el-form-item>
       <el-form-item label="设定数值" prop="presetNumber">
         <el-input v-model="dataForm.presetNumber" placeholder="设定数值"></el-input>
       </el-form-item>
       <el-form-item label="单位" prop="unit">
-        <el-input v-model="dataForm.unit" placeholder="单位"></el-input>
+        <el-input v-model="dataForm.unit"  :disabled="dataForm.id" placeholder="单位"></el-input>
       </el-form-item>
       <el-form-item label="设备通道" prop="channel">
-        <el-select v-model="dataForm.channel" placeholder="请选择设备通道" clearable>
+        <el-select v-model="dataForm.channel"  :disabled="dataForm.id" placeholder="请选择设备通道" clearable>
           <el-option
             v-for="item in channelList"
             :key="item.value"
@@ -34,6 +34,7 @@
           inactive-color="#ff4949"
           active-value="1"
           inactive-value="0"
+          :disabled="dataForm.id"
         ></el-switch>
       </el-form-item>
       <el-form-item label="设备类型" prop="machineType">

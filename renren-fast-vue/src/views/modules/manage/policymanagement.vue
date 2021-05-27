@@ -46,21 +46,28 @@
       @selection-change="selectionChangeHandle"
       style="width: 100%;">
       <el-table-column
-        prop="machineid"
+        type="selection"
+        header-align="center"
+        align="center"
+        width="50">
+      </el-table-column>
+      <el-table-column
+        prop="machineId"
         header-align="center"
         align="center"
         label="控制器编号">
       </el-table-column>
       <el-table-column
-        prop="machinename"
+        prop="machineName"
         header-align="center"
         align="center"
         label="控制器名称">
       </el-table-column>
       <el-table-column
-        prop="machinetype"
+        prop="machineType"
         header-align="center"
         align="center"
+        :formatter="formatterMachineType"
         label="控制器类型">
       </el-table-column>
       <el-table-column
@@ -70,37 +77,31 @@
         label="控制器通道">
       </el-table-column>
       <el-table-column
-        type="selection"
-        header-align="center"
-        align="center"
-        width="50">
-      </el-table-column>
-      <el-table-column
-        prop="numbermin"
+        prop="numberMin"
         header-align="center"
         align="center"
         label="策略设定最小值">
       </el-table-column>
       <el-table-column
-        prop="numbermax"
+        prop="numberMax"
         header-align="center"
         align="center"
         label="策略设定最大值">
       </el-table-column>
       <el-table-column
-        prop="unit"
+        prop="betweenSensorId"
         header-align="center"
         align="center"
-        label="单位">
+        label="关联传感器编号">
       </el-table-column>
-      <el-table-column prop="enablestatus" header-align="center" align="center" label="策略启用状态">
+      <el-table-column prop="enableStatus" header-align="center" align="center" label="策略启用状态">
         <template slot-scope="scope">
           <el-switch
-            v-model="scope.row.enablestatus"
+            v-model="scope.row.enableStatus"
             active-color="#13ce66"
             inactive-color="#ff4949"
-            :active-value="1"
-            :inactive-value="0"
+            active-value="1"
+            inactive-value="0"
             @change="updatepresetStatus(scope.row)"
           ></el-switch>
         </template>
@@ -146,7 +147,60 @@
         totalPage: 0,
         dataListLoading: false,
         dataListSelections: [],
-        addOrUpdateVisible: false
+        addOrUpdateVisible: false,
+        machineTypeList: [
+          {
+            value: 'a',
+            label: '土壤温度传感器'
+          }, {
+            value: 'b',
+            label: '土壤湿度传感器'
+          }, {
+            value: 'c',
+            label: '空气湿度传感器'
+          }, {
+            value: 'd',
+            label: '风速传感器'
+          }, {
+            value: 'e',
+            label: '光照传感器'
+          }, {
+            value: 'f',
+            label: 'CO2浓度传感器'
+          },
+          {
+            value: 'g',
+            label: '土壤温度控制器'
+          }, {
+            value: 'h',
+            label: '土壤加湿器'
+          }, {
+            value: 'i',
+            label: '空气加湿器'
+          }, {
+            value: 'j',
+            label: '挡风板'
+          }, {
+            value: 'k',
+            label: '遮光板-补光灯'
+          }, {
+            value: 'l',
+            label: 'CO2浓度控制器'
+          }
+        ],
+        channelList: [{
+          value: 'a',
+          label: 'a'
+        }, {
+          value: 'b',
+          label: 'b'
+        }, {
+          value: 'c',
+          label: 'c'
+        }, {
+          value: 'd',
+          label: 'd'
+        }],
       }
     },
     components: {
@@ -250,6 +304,44 @@
         }).catch(() => {
         });
       },
+      formatterMachineType(row, column) {
+        let machineType = row[column.property];
+        switch (machineType) {
+          case 'a':
+            return '土壤温度传感器';
+          case 'b':
+            return '土壤湿度传感器';
+          case 'c':
+            return '空气湿度传感器';
+          case 'd':
+            return '风速传感器';
+          case 'e':
+            return '光照传感器';
+
+          case 'f':
+            return 'CO2浓度传感器';
+
+          case 'g':
+            return '土壤温度控制器';
+
+          case 'h':
+            return '土壤加湿器';
+
+          case 'i':
+            return '空气加湿器';
+
+          case 'j':
+            return '挡风板';
+
+          case 'k':
+            return '遮光板-补光灯';
+
+          case 'l':
+            return 'CO2浓度控制器';
+          default :
+            return '';
+        }
+      }
     }
   }
 </script>
