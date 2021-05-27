@@ -5,11 +5,19 @@
     :visible.sync="visible">
     <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()"
              label-width="140px">
-      <el-form-item label="设备编号" prop="machineId">
-        <el-input v-model="dataForm.machineId" placeholder="设备编号"></el-input>
+      <el-form-item label="控制器设备编号" prop="machineId">
+        <el-select v-model="dataForm.machineId" @change="changeMachineId(dataForm.machineId)" :disabled="dataForm.id"
+                   placeholder="请选择控制器设备编号" clearable>
+          <el-option
+            v-for="item in controllerList"
+            :key="item.machineId"
+            :label="item.machineId"
+            :value="item.machineId">
+          </el-option>
+        </el-select>
       </el-form-item>
-      <el-form-item label="设备名称" prop="machineName">
-        <el-input v-model="dataForm.machineName" placeholder="设备名称"></el-input>
+      <el-form-item label="控制器设备名称" prop="machineName">
+        <el-input v-model="dataForm.machineName" disabled="true" placeholder="设备名称"></el-input>
       </el-form-item>
       <el-form-item label="策略设定最小值" prop="numberMin">
         <el-input v-model="dataForm.numberMin" placeholder="策略设定最小值"></el-input>
@@ -18,7 +26,7 @@
         <el-input v-model="dataForm.numberMax" placeholder="策略设定最大值"></el-input>
       </el-form-item>
       <el-form-item label="设备通道" prop="channel">
-        <el-select v-model="dataForm.channel" :disabled="dataForm.id" placeholder="请选择设备通道" clearable>
+        <el-select v-model="dataForm.channel" disabled="true" placeholder="请选择设备通道" clearable>
           <el-option
             v-for="item in channelList"
             :key="item.value"
@@ -28,7 +36,7 @@
         </el-select>
       </el-form-item>
       <el-form-item label="设备类型" prop="machineType">
-        <el-select v-model="dataForm.machineType" :disabled="dataForm.id" placeholder="请选择设备通道" clearable>
+        <el-select v-model="dataForm.machineType" disabled="true" placeholder="请选择设备通道" clearable>
           <el-option
             v-for="item in machineTypeList"
             :key="item.value"
@@ -47,18 +55,16 @@
           </el-option>
         </el-select>
       </el-form-item>
-      <el-table-column prop="enablestatus" header-align="center" align="center" label="启用状态">
-        <template slot-scope="scope">
-          <el-switch
-            v-model="scope.row.enablestatus"
-            active-color="#13ce66"
-            inactive-color="#ff4949"
-            active-value="1"
-            inactive-value="0"
-            @change="updatepresetStatus(scope.row)"
-          ></el-switch>
-        </template>
-      </el-table-column>
+
+      <el-form-item label="设定启用状态" prop="enableStatus">
+        <el-switch
+          v-model="dataForm.enableStatus"
+          active-color="#13ce66"
+          inactive-color="#ff4949"
+          active-value="1"
+          inactive-value="0"
+        ></el-switch>
+      </el-form-item>
     </el-form>
     <span slot="footer" class="dialog-footer">
       <el-button @click="visible = false">取消</el-button>
@@ -73,7 +79,7 @@
       return {
         visible: false,
         dataForm: {
-          enablestatus: '',
+          enableStatus: '',
           unit: '',
           numberMin: '',
           numberMax: '',
@@ -85,7 +91,7 @@
           id: 0,
         },
         dataRule: {
-          enablestatus: [
+          enableStatus: [
             {required: true, message: '启用状态（默认为不启用）不能为空', trigger: 'blur'}
           ],
           unit: [
@@ -166,7 +172,8 @@
           value: 'd',
           label: 'd'
         }],
-        dataList: []
+        dataList: [],
+        controllerList: []
       }
     },
     methods: {
@@ -182,7 +189,7 @@
               params: this.$http.adornParams()
             }).then(({data}) => {
               if (data && data.code === 0) {
-                this.dataForm.enablestatus = data.policyManagement.enablestatus
+                this.dataForm.enableStatus = data.policyManagement.enableStatus
                 this.dataForm.unit = data.policyManagement.unit
                 this.dataForm.numberMin = data.policyManagement.numberMin
                 this.dataForm.numberMax = data.policyManagement.numberMax
@@ -204,9 +211,23 @@
           })
         }).then(({data}) => {
           if (data && data.code === 0) {
-            this.dataList = data.page.list
+            this.dataList = data.page
           } else {
             this.dataList = []
+          }
+        });
+
+        this.$http({
+          url: this.$http.adornUrl('/manage/machinecontroller/queryAll'),
+          method: 'get',
+          params: this.$http.adornParams({
+            machineSensor: 0
+          })
+        }).then(({data}) => {
+          if (data && data.code === 0) {
+            this.controllerList = data.page
+          } else {
+            this.controllerList = []
           }
         })
       },
@@ -218,7 +239,7 @@
               url: this.$http.adornUrl(`/manage/policymanagement/${!this.dataForm.id ? 'save' : 'update'}`),
               method: 'post',
               data: this.$http.adornData({
-                'enablestatus': this.dataForm.enablestatus,
+                'enableStatus': this.dataForm.enableStatus,
                 'unit': this.dataForm.unit,
                 'numberMin': this.dataForm.numberMin,
                 'numberMax': this.dataForm.numberMax,
@@ -244,6 +265,16 @@
                 this.$message.error(data.msg)
               }
             })
+          }
+        })
+      },
+      changeMachineId(machineId) {
+        this.controllerList.forEach((item) => {
+          if (item.machineId === machineId) {
+            this.dataForm.machineName = item.machineName;
+            this.dataForm.enableStatus = "1";
+            this.dataForm.channel = item.channel;
+            this.dataForm.machineType = item.machineType;
           }
         })
       }
