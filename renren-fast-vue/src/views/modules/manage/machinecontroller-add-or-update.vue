@@ -38,7 +38,7 @@
         ></el-switch>
       </el-form-item>
       <el-form-item label="设备类型" prop="machineType">
-        <el-select v-model="dataForm.machineType" placeholder="请选择设备通道" clearable>
+        <el-select v-model="dataForm.machineType"  :disabled="dataForm.id"   placeholder="请选择设备通道" clearable>
           <el-option
             v-for="item in machineTypeList"
             :key="item.value"

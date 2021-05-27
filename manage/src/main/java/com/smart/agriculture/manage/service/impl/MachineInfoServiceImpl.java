@@ -68,7 +68,7 @@ public class MachineInfoServiceImpl extends ServiceImpl<MachineInfoDao, MachineI
         return this.baseMapper.selectList(queryWrapper);
     }
 
-}
+
     @Override
     public Boolean saveMachineInfo(MachineInfoEntity machineInfoEntity) throws Exception {
         QueryWrapper<MachineInfoEntity> queryWrapper = new QueryWrapper<>();
