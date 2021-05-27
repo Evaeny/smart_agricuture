@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 //import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -98,10 +99,11 @@ public class MachineSensorController {
     /**
      * 删除
      */
-    @RequestMapping("/query/{machineId}")
-    public R query(@PathVariable("machineId") String machineId) throws Exception {
-        MachineSensorEntity sensorEntity = machineSensorService.saveMachineSensor(machineId);
+    @RequestMapping("/query/{id}")
+    public R query(@PathVariable("id") String id) throws Exception {
+        MachineSensorEntity sensorEntity = machineSensorService.saveMachineSensor(id);
         return R.ok().put("machineSensor", sensorEntity);
     }
+
 
 }

@@ -79,7 +79,7 @@
         width="150"
         label="操作">
         <template slot-scope="scope">
-          <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.machineId)">查询</el-button>
+          <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">查询</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -196,10 +196,10 @@
           })
         }).then(({data}) => {
           if (data && data.code === 0) {
-            this.dataList = data.page.list
-            this.totalPage = data.page.totalCount
+            this.dataList = data.page.list;
+            this.totalPage = data.page.totalCount;
           } else {
-            this.dataList = []
+            this.dataList = [];
             this.totalPage = 0
           }
           this.dataListLoading = false
@@ -221,10 +221,10 @@
         this.dataListSelections = val
       },
       // 新增 / 修改
-      addOrUpdateHandle(machineId) {
-        this.addOrUpdateVisible = true
+      addOrUpdateHandle(id) {
+        this.addOrUpdateVisible = true;
         this.$nextTick(() => {
-          this.$refs.addOrUpdate.init(machineId)
+          this.$refs.addOrUpdate.init(id)
         })
       },
       // 删除

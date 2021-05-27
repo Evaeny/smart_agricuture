@@ -11,6 +11,7 @@ import com.smart.agriculture.manage.service.MachineInfoService;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.util.List;
 import java.util.Map;
 
 
@@ -39,6 +40,14 @@ public class MachineInfoServiceImpl extends ServiceImpl<MachineInfoDao, MachineI
                 queryWrapper
         );
         return new PageUtils(page);
+    }
+
+    @Override
+    public List<MachineInfoEntity> queryAll(Map<String, Object> params) {
+        QueryWrapper<MachineInfoEntity> queryWrapper = new QueryWrapper<>();
+        queryWrapper.in("machine_type", "a", "b", "c", "d", "e", "f");
+        queryWrapper.in("machine_status", true);
+        return this.baseMapper.selectList(queryWrapper);
     }
 
 }

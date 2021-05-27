@@ -2,26 +2,27 @@
   <el-dialog
     title='查询结果'
     :close-on-click-modal="false"
-    :visible.sync="visible">
-    <el-form :model="dataForm" ref="dataForm" @keyup.enter.native="dataFormSubmit()"
-             label-width="200px">
+    :visible.sync="visible"
+    :destroy-on-close=true
+  >
+    <el-form :model="dataForm" ref="dataForm" label-width="200px">
       <el-form-item label="传感器编号" prop="machineId">
-        <span>{{dataForm.machineId}}</span>
+        <span v-model="dataForm.machineId">{{dataForm.machineId}}</span>
       </el-form-item>
       <el-form-item label="传感器名称" prop="machineName">
-        <span>{{dataForm.machineName}}</span>
+        <span v-model="dataForm.machineName">{{dataForm.machineName}}</span>
       </el-form-item>
       <el-form-item label="传感器类型" prop="machineType">
-        <span>{{dataForm.machineType}}</span>
+        <span v-model="dataForm.machineType">{{dataForm.machineType}}</span>
       </el-form-item>
       <el-form-item label="数值" prop="conditionNumber">
-        <span>{{dataForm.conditionNumber}}</span>
+        <span v-model="dataForm.conditionNumber">{{dataForm.conditionNumber}}</span>
       </el-form-item>
       <el-form-item label="单位" prop="unit">
-        <span>{{dataForm.unit}}</span>
+        <span v-model="dataForm.unit">{{dataForm.unit}}</span>
       </el-form-item>
       <el-form-item label="设备通道" prop="channel">
-        <span>{{dataForm.channel}}</span>
+        <span v-model="dataForm.channel">{{dataForm.channel}}</span>
       </el-form-item>
     </el-form>
   </el-dialog>
@@ -79,15 +80,14 @@
       }
     },
     methods: {
-
-      init(machineId) {
-        this.dataForm.machineId = machineId || 0;
+      init(id) {
+        this.dataForm.id = id;
         this.visible = true;
         this.$nextTick(() => {
           this.$refs['dataForm'].resetFields();
-          if (this.dataForm.machineId) {
+          if (this.dataForm.id) {
             this.$http({
-              url: this.$http.adornUrl(`/manage/machinesensor/query/${this.dataForm.machineId}`),
+              url: this.$http.adornUrl(`/manage/machinesensor/query/${this.dataForm.id}`),
               method: 'get',
               params: this.$http.adornParams()
             }).then(({data}) => {
@@ -104,63 +104,14 @@
           }
         })
       },
-      // 表单提交
-      dataFormSubmit() {
-        this.$refs['dataForm'].validate((valid) => {
-          if (valid) {
-            this.$http({
-              url: this.$http.adornUrl(`/manage/machinesensor/${!this.dataForm.id ? 'save' : 'update'}`),
-              method: 'post',
-              data: this.$http.adornData({
-                'id': this.dataForm.id || undefined,
-                'machineName': this.dataForm.machineName,
-                'conditionNumber': this.dataForm.conditionNumber,
-                'unit': this.dataForm.unit,
-                'channel': this.dataForm.channel,
-                'enableStatus': this.dataForm.enableStatus,
-                'machineType': this.dataForm.machineType,
-                'machineId': this.dataForm.machineId
-              })
-            }).then(({data}) => {
-              if (data && data.code === 0) {
-                this.$message({
-                  message: '操作成功',
-                  type: 'success',
-                  duration: 1500,
-                  onClose: () => {
-                    this.visible = false
-                    this.$emit('refreshDataList')
-                  }
-                })
-              } else {
-                this.$message.error(data.msg)
-              }
-            })
-          }
-        })
-      },
       transMachineType(data) {
         if (data == 'a') {
           return '土壤温度传感器'
         } else if (data == 'b') {
           return '土壤湿度传感器';
+        } else if (data == 'c') {
+          return '';
         }
-        // switch (data) {
-        //   case 'a':
-        //     return '土壤温度传感器';
-        //   case 'b':
-        //     return '土壤湿度传感器';
-        //   case 'c':
-        //     return '空气湿度传感器';
-        //   case 'd':
-        //     return '风速传感器';
-        //   case 'e':
-        //     return '光照传感器';
-        //   case 'f':
-        //     return 'CO2浓度传感器';
-        //   default :
-        //     return '';
-        // }
       },
     }
   }

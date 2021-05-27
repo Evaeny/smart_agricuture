@@ -70,9 +70,9 @@ public class MachineSensorServiceImpl extends ServiceImpl<MachineSensorDao, Mach
     }
 
     @Override
-    public MachineSensorEntity saveMachineSensor(String machineId) throws Exception {
+    public MachineSensorEntity saveMachineSensor(String id) throws Exception {
         LambdaQueryWrapper<MachineInfoEntity> infoQueryWrapper = new LambdaQueryWrapper<>();
-        infoQueryWrapper.eq(MachineInfoEntity::getMachineId, machineId);
+        infoQueryWrapper.eq(MachineInfoEntity::getId, id);
         infoQueryWrapper.eq(MachineInfoEntity::getMachineStatus, true);
         infoQueryWrapper.last("limit 1");
         MachineInfoEntity machineInfoEntity = machineInfoService.getBaseMapper().selectOne(infoQueryWrapper);
@@ -87,7 +87,7 @@ public class MachineSensorServiceImpl extends ServiceImpl<MachineSensorDao, Mach
         this.save(sensorEntity);
 
         LambdaQueryWrapper<PolicyManagementEntity> policyQueryWrapper = new LambdaQueryWrapper<>();
-        policyQueryWrapper.eq(PolicyManagementEntity::getBetweenSensorId, machineId).eq(PolicyManagementEntity::getEnableStatus, true);
+        policyQueryWrapper.eq(PolicyManagementEntity::getBetweenSensorId, machineInfoEntity.getMachineId()).eq(PolicyManagementEntity::getEnableStatus, true);
         List<PolicyManagementEntity> policyList = policyManagementService.list(policyQueryWrapper);
         if (!CollectionUtils.isEmpty(policyList)) {
             for (PolicyManagementEntity policyItem : policyList) {
@@ -95,7 +95,7 @@ public class MachineSensorServiceImpl extends ServiceImpl<MachineSensorDao, Mach
                 Double numberMax = policyItem.getNumberMax();
                 if (randomDouble > numberMax || randomDouble < numberMin) {
                     MessageInfoEntity messageInfoEntity = new MessageInfoEntity();
-                    messageInfoEntity.setMachineId(machineId);
+                    messageInfoEntity.setMachineId(machineInfoEntity.getMachineId());
                     messageInfoEntity.setMachineName(machineInfoEntity.getMachineName());
                     messageInfoEntity.setMessageType("数据异常");
                     messageInfoEntity.setCreatTime(new Date());
@@ -113,6 +113,11 @@ public class MachineSensorServiceImpl extends ServiceImpl<MachineSensorDao, Mach
             }
         }
         return sensorEntity;
+    }
+
+    @Override
+    public List<MachineSensorEntity> queryAll(Map<String, Object> params) {
+        return null;
     }
 
 }

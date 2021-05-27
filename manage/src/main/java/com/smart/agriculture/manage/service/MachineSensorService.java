@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.smart.agriculture.common.utils.PageUtils;
 import com.smart.agriculture.manage.entity.MachineSensorEntity;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -19,5 +20,8 @@ public interface MachineSensorService extends IService<MachineSensorEntity> {
     Integer saveMachineSensor(MachineSensorEntity machineSensorEntity);
 
     MachineSensorEntity saveMachineSensor(String machineId) throws Exception;
+
+
+    List<MachineSensorEntity> queryAll(Map<String, Object> params);
 }
 
