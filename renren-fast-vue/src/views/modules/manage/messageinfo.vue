@@ -9,9 +9,6 @@
           <el-form-item label="来源设备名称">
             <el-input v-model="dataForm.machineName" placeholder="来源设备名称" clearable></el-input>
           </el-form-item>
-          <el-form-item label="来源通道">
-            <el-input v-model="dataForm.channel" placeholder="来源通道" clearable></el-input>
-          </el-form-item>
           <el-form-item label="接收时间">
             <el-col :span="10">
               <el-date-picker type="date" placeholder="开始时间" v-model="dataForm.startTime"

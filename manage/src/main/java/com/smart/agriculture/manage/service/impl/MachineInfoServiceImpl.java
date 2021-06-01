@@ -9,7 +9,6 @@ import com.smart.agriculture.common.utils.Query;
 import com.smart.agriculture.manage.dao.*;
 import com.smart.agriculture.manage.entity.*;
 import com.smart.agriculture.manage.service.MachineInfoService;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -53,6 +52,9 @@ public class MachineInfoServiceImpl extends ServiceImpl<MachineInfoDao, MachineI
 
 
         queryWrapper.like(!StringUtils.isEmpty(params.get("machineName")), "machine_name", params.get("machineName"));
+        queryWrapper.ge(!StringUtils.isEmpty(params.get("startTime")), "create_time", params.get("startTime"));
+        queryWrapper.le(!StringUtils.isEmpty(params.get("endTime")), "create_time", params.get("endTime"));
+        queryWrapper.orderByDesc("create_time");
         IPage<MachineInfoEntity> page = this.page(
                 new Query<MachineInfoEntity>().getPage(params),
                 queryWrapper
@@ -119,6 +121,15 @@ public class MachineInfoServiceImpl extends ServiceImpl<MachineInfoDao, MachineI
         LambdaQueryWrapper<MachineInfoEntity> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.in(MachineInfoEntity::getId, ids);
         List<MachineInfoEntity> entityList = this.baseMapper.selectList(queryWrapper);
+        for (MachineInfoEntity machineInfoEntity : entityList) {
+            MessageInfoEntity messageInfoEntity = new MessageInfoEntity();
+            messageInfoEntity.setDeleteYn("1");
+            messageInfoEntity.setMachineId(machineInfoEntity.getMachineId());
+            messageInfoEntity.setMachineName(machineInfoEntity.getMachineName());
+            messageInfoEntity.setMessageType("设备删除");
+            messageInfoEntity.setCreatTime(new Date());
+            messageInfoDao.insert(messageInfoEntity);
+        }
         List<String> machineIdList = entityList.stream().map(MachineInfoEntity::getMachineId).collect(Collectors.toList());
         LambdaQueryWrapper<MachineControllerEntity> deleteWrapper = new LambdaQueryWrapper<>();
         deleteWrapper.in(MachineControllerEntity::getMachineId, machineIdList);
@@ -135,8 +146,10 @@ public class MachineInfoServiceImpl extends ServiceImpl<MachineInfoDao, MachineI
     @Override
     public Boolean updateStatus(MachineInfoEntity machineInfoEntity) {
         LambdaQueryWrapper<MachineInfoEntity> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(MachineInfoEntity::getId, machineInfoEntity.getId());
+        queryWrapper.eq(MachineInfoEntity::getId, machineInfoEntity.getId())
+                    .last("limit 1");
         MachineInfoEntity machineInfoEntity1 = this.baseMapper.selectOne(queryWrapper);
+        Boolean iscuss = this.baseMapper.updateById(machineInfoEntity) > 0;
 //        if (("a").equals(machineInfoEntity1.getMachineType()) || ("b").equals(machineInfoEntity1.getMachineType()) || ("c").equals(machineInfoEntity1.getMachineType()) || ("d").equals(machineInfoEntity1.getMachineType()) || ("e").equals(machineInfoEntity1.getMachineType()) || ("f").equals(machineInfoEntity1.getMachineType())) {
 //            LambdaQueryWrapper<MachineSensorEntity> queryWrapper1 = new LambdaQueryWrapper<>();
 //            queryWrapper1.eq(MachineSensorEntity::getMachineId, machineInfoEntity1.getMachineId())
@@ -147,6 +160,7 @@ public class MachineInfoServiceImpl extends ServiceImpl<MachineInfoDao, MachineI
 //                machineSensorDao.updateById(machineSensorEntity);
 //            }
 //        }else
+        if (iscuss){
             if (("g").equals(machineInfoEntity1.getMachineType()) || ("h").equals(machineInfoEntity1.getMachineType()) || ("i").equals(machineInfoEntity1.getMachineType()) || ("j").equals(machineInfoEntity1.getMachineType()) || ("k").equals(machineInfoEntity1.getMachineType()) || ("l").equals(machineInfoEntity1.getMachineType())) {
             LambdaQueryWrapper<MachineControllerEntity> queryWrapper2 = new LambdaQueryWrapper<>();
             queryWrapper2.eq(MachineControllerEntity::getMachineId, machineInfoEntity1.getMachineId())
@@ -154,30 +168,40 @@ public class MachineInfoServiceImpl extends ServiceImpl<MachineInfoDao, MachineI
             MachineControllerEntity machineControllerEntity = machineControllerDao.selectOne(queryWrapper2);
             machineControllerEntity.setPresetStatus(machineInfoEntity.getMachineStatus());
             machineControllerDao.updateById(machineControllerEntity);
+            }
         }
-        Boolean iscuss = this.baseMapper.updateById(machineInfoEntity) > 0;
+//        Boolean iscuss = this.baseMapper.updateById(machineInfoEntity) > 0;
         return iscuss;
     }
 
     @Override
     public Boolean updateName(MachineInfoEntity machineInfoEntity) {
-        LambdaQueryWrapper<MachineControllerEntity> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(MachineControllerEntity::getMachineId, machineInfoEntity.getMachineId())
-                .eq(MachineControllerEntity::getMachineType, machineInfoEntity.getMachineType());
-        MachineControllerEntity machineControllerEntity = machineControllerDao.selectOne(queryWrapper);
-        if (!StringUtils.isEmpty(queryWrapper)) {
-            machineControllerEntity.setMachineName(machineInfoEntity.getMachineName());
-            machineControllerDao.updateById(machineControllerEntity);
-        }
-        LambdaQueryWrapper<PolicyManagementEntity> queryWrapper2 = new LambdaQueryWrapper<>();
-        queryWrapper2.eq(PolicyManagementEntity::getMachineId, machineInfoEntity.getMachineId())
-                .eq(PolicyManagementEntity::getMachineType, machineInfoEntity.getMachineType());
-        PolicyManagementEntity policyManagementEntity = policyManagementDao.selectOne(queryWrapper2);
-        if (!StringUtils.isEmpty(policyManagementEntity)){
-            policyManagementEntity.setMachineName(machineInfoEntity.getMachineName());
-            policyManagementDao.updateById(policyManagementEntity);
-        }
         Boolean iscuss = this.baseMapper.updateById(machineInfoEntity) > 0;
+        if (iscuss) {
+            LambdaQueryWrapper<MachineControllerEntity> queryWrapper = new LambdaQueryWrapper<>();
+            queryWrapper.eq(MachineControllerEntity::getMachineId, machineInfoEntity.getMachineId())
+                    .eq(MachineControllerEntity::getMachineType, machineInfoEntity.getMachineType());
+            MachineControllerEntity machineControllerEntity = machineControllerDao.selectOne(queryWrapper);
+            if (!StringUtils.isEmpty(machineControllerEntity)) {
+                machineControllerEntity.setMachineName(machineInfoEntity.getMachineName());
+                machineControllerDao.updateById(machineControllerEntity);
+            }
+            LambdaQueryWrapper<PolicyManagementEntity> queryWrapper2 = new LambdaQueryWrapper<>();
+            queryWrapper2.eq(PolicyManagementEntity::getMachineId, machineInfoEntity.getMachineId())
+                    .eq(PolicyManagementEntity::getMachineType, machineInfoEntity.getMachineType());
+            PolicyManagementEntity policyManagementEntity = policyManagementDao.selectOne(queryWrapper2);
+            if (!StringUtils.isEmpty(policyManagementEntity)) {
+                policyManagementEntity.setMachineName(machineInfoEntity.getMachineName());
+                policyManagementDao.updateById(policyManagementEntity);
+            }
+            MessageInfoEntity messageInfoEntity = new MessageInfoEntity();
+            messageInfoEntity.setDeleteYn("1");
+            messageInfoEntity.setMachineId(machineInfoEntity.getMachineId());
+            messageInfoEntity.setMachineName(machineInfoEntity.getMachineName());
+            messageInfoEntity.setMessageType("设备名称更改");
+            messageInfoEntity.setCreatTime(new Date());
+            messageInfoDao.insert(messageInfoEntity);
+        }
         return iscuss;
     }
 }

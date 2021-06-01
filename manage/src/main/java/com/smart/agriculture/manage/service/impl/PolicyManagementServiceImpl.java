@@ -24,6 +24,9 @@ public class PolicyManagementServiceImpl extends ServiceImpl<PolicyManagementDao
         queryWrapper.eq(!StringUtils.isEmpty(params.get("channel")), "channel", params.get("channel"));
         queryWrapper.eq(!StringUtils.isEmpty(params.get("machineId")), "machine_id", params.get("machineId"));
         queryWrapper.like(!StringUtils.isEmpty(params.get("machineName")), "machine_name", params.get("machineName"));
+        queryWrapper.ge(!StringUtils.isEmpty(params.get("startTime")), "create_time", params.get("startTime"));
+        queryWrapper.le(!StringUtils.isEmpty(params.get("endTime")), "create_time", params.get("endTime"));
+        queryWrapper.orderByDesc("create_time");
         IPage<PolicyManagementEntity> page = this.page(
                 new Query<PolicyManagementEntity>().getPage(params),
                 queryWrapper

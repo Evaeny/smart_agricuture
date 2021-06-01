@@ -56,12 +56,14 @@ public class MachineControllerServiceImpl extends ServiceImpl<MachineControllerD
     public Boolean updateStatus(MachineControllerEntity machineControllerEntity) {
         LambdaQueryWrapper<MachineControllerEntity> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(MachineControllerEntity::getId, machineControllerEntity.getId());
+        queryWrapper.last("limit 1");
         MachineControllerEntity machineControllerEntity1 = this.baseMapper.selectOne(queryWrapper);
         Boolean iscuss = this.baseMapper.updateById(machineControllerEntity) > 0;
         if (iscuss) {
             LambdaQueryWrapper<MachineInfoEntity> queryWrapper2 = new LambdaQueryWrapper<>();
             queryWrapper2.eq(MachineInfoEntity::getMachineId, machineControllerEntity1.getMachineId())
-                    .eq(MachineInfoEntity::getMachineType, machineControllerEntity1.getMachineType());
+                    .eq(MachineInfoEntity::getMachineType, machineControllerEntity1.getMachineType())
+                    .last("limit 1");
             MachineInfoEntity machineInfoEntity = machineInfoDao.selectOne(queryWrapper2);
             machineInfoEntity.setMachineStatus(machineControllerEntity.getPresetStatus());
             machineInfoDao.updateById(machineInfoEntity);

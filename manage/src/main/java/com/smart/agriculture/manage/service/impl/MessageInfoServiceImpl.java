@@ -41,7 +41,13 @@ public class MessageInfoServiceImpl extends ServiceImpl<MessageInfoDao, MessageI
     @Override
     public PageUtils selectListInfo(Map<String, Object> params) {
         QueryWrapper<MessageInfoEntity> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq(!StringUtils.isEmpty(params.get("machineType")), "machine_type", params.get("machineType"));
+        queryWrapper.eq(!StringUtils.isEmpty(params.get("machineId")), "machine_id", params.get("machineId"));
+        queryWrapper.like(!StringUtils.isEmpty(params.get("machineName")), "machine_name", params.get("machineName"));
         queryWrapper.eq("delete_yn",true);
+        queryWrapper.ge(!StringUtils.isEmpty(params.get("startTime")), "creat_time", params.get("startTime"));
+        queryWrapper.le(!StringUtils.isEmpty(params.get("endTime")), "creat_time", params.get("endTime"));
+        queryWrapper.orderByDesc("creat_time");
         IPage<MessageInfoEntity> page = this.page(
                 new Query<MessageInfoEntity>().getPage(params),
                 queryWrapper

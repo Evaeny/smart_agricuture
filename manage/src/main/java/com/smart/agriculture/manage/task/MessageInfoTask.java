@@ -4,16 +4,13 @@ import cn.hutool.core.util.RandomUtil;
 import com.alibaba.nacos.client.naming.utils.CollectionUtils;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.smart.agriculture.manage.converter.MachineConverter;
-import com.smart.agriculture.manage.entity.MachineControllerEntity;
-import com.smart.agriculture.manage.entity.MachineSensorEntity;
-import com.smart.agriculture.manage.entity.MessageInfoEntity;
-import com.smart.agriculture.manage.entity.PolicyManagementEntity;
-import com.smart.agriculture.manage.service.MachineControllerService;
-import com.smart.agriculture.manage.service.MachineSensorService;
-import com.smart.agriculture.manage.service.MessageInfoService;
-import com.smart.agriculture.manage.service.PolicyManagementService;
+import com.smart.agriculture.manage.entity.*;
+import com.smart.agriculture.manage.service.*;
+import lombok.extern.log4j.Log4j;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
 
 import java.math.RoundingMode;
 import java.time.LocalDateTime;
@@ -28,6 +25,7 @@ import java.util.List;
  * @author 蒋一帆
  */
 //@Component
+@Log4j2
 public class MessageInfoTask {
 
     @Autowired
@@ -40,7 +38,7 @@ public class MessageInfoTask {
     private MachineSensorService machineSensorService;
 
     @Autowired
-    private MachineControllerService machineControllerService;
+    private MachineInfoService machineInfoService;
 
     @Autowired
     private MachineConverter machineConverter;
@@ -48,34 +46,41 @@ public class MessageInfoTask {
     private static String[] typeList = new String[]{"a", "b", "c", "d", "e", "f"};
 
     //3.添加定时任务
-    @Scheduled(cron = "0/5 * * * * ?")
+    @Scheduled(cron = "0/20 * * * * ?")
     //或直接指定时间间隔，例如：5秒
     //@Scheduled(fixedRate=5000)
     public void configureTasks() {
-        System.out.println("执行消息中心定时任务时间: " + LocalDateTime.now());
-        LambdaQueryWrapper<MachineControllerEntity> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.in(MachineControllerEntity::getMachineType, typeList);
-        queryWrapper.eq(MachineControllerEntity::getPresetStatus, true);
+        log.info("执行消息中心定时任务时间: " + LocalDateTime.now());
+        LambdaQueryWrapper<MachineInfoEntity> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.in(MachineInfoEntity::getMachineType, typeList);
+        queryWrapper.eq(MachineInfoEntity::getMachineStatus, true);
         // 1.查询所有启用状态的设备
-        List<MachineControllerEntity> machineList = machineControllerService.list(queryWrapper);
-
-        for (MachineControllerEntity item : machineList) {
+        List<MachineInfoEntity> machineList = machineInfoService.list(queryWrapper);
+        MachineSensorEntity machineSensorEntity = new MachineSensorEntity();
+        for (MachineInfoEntity item : machineList) {
             // 2.生成随机数
             Double randomDouble = RandomUtil.randomDouble(0, 100, 2, RoundingMode.HALF_UP);
+            log.info("生成随机数: " + randomDouble);
+            item.setId(null);
+            machineSensorEntity.setConditionNumber(randomDouble);
+            machineSensorEntity.setMachineId(item.getMachineId());
+            machineSensorEntity.setChannel(item.getChannel());
+            machineSensorEntity.setMachineName(item.getMachineName());
+            machineSensorEntity.setUnit(item.getUnit());
+            machineSensorEntity.setMachineType(item.getMachineType());
+            machineSensorEntity.setCreateTime(new Date());
+            machineSensorService.saveMachineSensor(machineSensorEntity);
 
-            MachineSensorEntity sensorEntity = machineConverter.controllerToSensor(item);
-            sensorEntity.setConditionNumber(randomDouble);
-            machineSensorService.saveMachineSensor(sensorEntity);
-
-            String controllerId = item.getMachineId();
+            String sensorId = item.getMachineId();
             LambdaQueryWrapper<PolicyManagementEntity> policyQueryWrapper = new LambdaQueryWrapper<>();
-            policyQueryWrapper.eq(PolicyManagementEntity::getBetweenSensorId, controllerId).eq(PolicyManagementEntity::getEnableStatus, true);
+            policyQueryWrapper.eq(PolicyManagementEntity::getBetweenSensorId, sensorId).eq(PolicyManagementEntity::getEnableStatus, true);
             List<PolicyManagementEntity> policyList = policyManagementService.list(policyQueryWrapper);
             if (!CollectionUtils.isEmpty(policyList)) {
                 for (PolicyManagementEntity policyItem : policyList) {
                     Double numberMin = policyItem.getNumberMin();
                     Double numberMax = policyItem.getNumberMax();
                     if (randomDouble > numberMax || randomDouble < numberMin) {
+                        log.info("插入消息中心表:數據異常 設備id" + item.getMachineId());
                         MessageInfoEntity messageInfoEntity = new MessageInfoEntity();
                         messageInfoEntity.setMachineId(item.getMachineId());
                         messageInfoEntity.setMachineName(item.getMachineName());
@@ -84,6 +89,7 @@ public class MessageInfoTask {
                         messageInfoEntity.setDeleteYn("1");
                         messageInfoService.save(messageInfoEntity);
 
+                      log.info("插入消息中心表:控制器修复 設備id" + item.getMachineId());
                         MessageInfoEntity messageInfoEntity2 = new MessageInfoEntity();
                         messageInfoEntity2.setMachineId(policyItem.getMachineId());
                         messageInfoEntity2.setMachineName(policyItem.getMachineName());

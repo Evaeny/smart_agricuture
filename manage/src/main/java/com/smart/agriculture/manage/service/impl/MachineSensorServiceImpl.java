@@ -49,8 +49,11 @@ public class MachineSensorServiceImpl extends ServiceImpl<MachineSensorDao, Mach
         QueryWrapper<MachineSensorEntity> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq(!StringUtils.isEmpty(params.get("machineType")), "machine_type", params.get("machineType"));
         queryWrapper.eq(!StringUtils.isEmpty(params.get("channel")), "channel", params.get("channel"));
-        queryWrapper.eq(!StringUtils.isEmpty(params.get("machineId")), "machineId", params.get("machineId"));
-        queryWrapper.like(!StringUtils.isEmpty(params.get("machineName")), "machineName", params.get("machineName"));
+        queryWrapper.eq(!StringUtils.isEmpty(params.get("machineId")), "machine_id", params.get("machineId"));
+        queryWrapper.like(!StringUtils.isEmpty(params.get("machineName")), "machine_name", params.get("machineName"));
+        queryWrapper.ge(!StringUtils.isEmpty(params.get("startTime")), "create_time", params.get("startTime"));
+        queryWrapper.le(!StringUtils.isEmpty(params.get("endTime")), "create_time", params.get("endTime"));
+        queryWrapper.orderByDesc("create_time");
         IPage<MachineSensorEntity> page = this.page(
                 new Query<MachineSensorEntity>().getPage(params),
                 queryWrapper
@@ -62,11 +65,7 @@ public class MachineSensorServiceImpl extends ServiceImpl<MachineSensorDao, Mach
     public Integer saveMachineSensor(MachineSensorEntity machineSensor) {
         machineSensor.setCreateTime(new Date());
         this.save(machineSensor);
-
-        PolicyManagementEntity policyManagementEntity = machineSensorConverter.sensorToPolicy(machineSensor);
-        policyManagementService.save(policyManagementEntity);
-
-        return null;
+        return 1;
     }
 
     @Override
@@ -77,7 +76,7 @@ public class MachineSensorServiceImpl extends ServiceImpl<MachineSensorDao, Mach
         infoQueryWrapper.last("limit 1");
         MachineInfoEntity machineInfoEntity = machineInfoService.getBaseMapper().selectOne(infoQueryWrapper);
         if (machineInfoEntity == null) {
-            throw new Exception("设备编码不存在或者设备未启用,请确认");
+            throw new Exception("该设备不存在或者设备未启用,请确认");
         }
 
         MachineSensorEntity sensorEntity = machineSensorConverter.infoToSensor(machineInfoEntity);
@@ -87,7 +86,8 @@ public class MachineSensorServiceImpl extends ServiceImpl<MachineSensorDao, Mach
         this.save(sensorEntity);
 
         LambdaQueryWrapper<PolicyManagementEntity> policyQueryWrapper = new LambdaQueryWrapper<>();
-        policyQueryWrapper.eq(PolicyManagementEntity::getBetweenSensorId, machineInfoEntity.getMachineId()).eq(PolicyManagementEntity::getEnableStatus, true);
+        policyQueryWrapper.eq(PolicyManagementEntity::getBetweenSensorId, machineInfoEntity.getMachineId())
+                .eq(PolicyManagementEntity::getEnableStatus, true);
         List<PolicyManagementEntity> policyList = policyManagementService.list(policyQueryWrapper);
         if (!CollectionUtils.isEmpty(policyList)) {
             for (PolicyManagementEntity policyItem : policyList) {

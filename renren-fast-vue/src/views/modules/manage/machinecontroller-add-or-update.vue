@@ -112,6 +112,33 @@
           }, {
             value: 'f',
             label: 'CO2浓度控制器'
+          },
+          {
+            value: 'g',
+            label: '土壤温度控制器'
+          }, {
+            value: 'h',
+            label: '土壤加湿器'
+          }, {
+            value: 'i',
+            label: '空气加湿器'
+          }, {
+            value: 'j',
+            label: '挡风板'
+          }, {
+            value: 'k',
+            label: '遮光板-补光灯'
+          }, {
+            value: 'l',
+            label: 'CO2浓度控制器'
+          },
+          {
+            value: 'g',
+            label: '土壤温度传感器'
+          }
+          , {
+            value: 'h',
+            label: 'CO2浓度传感器'
           }
         ],
         channelList: [{
