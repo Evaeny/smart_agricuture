@@ -2,7 +2,7 @@
   <div class="mod-config">
     <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()">
       <el-form-item>
-        <el-form-item label="来源设备编号">
+        <el-form-item label="123">
           <el-input v-model="dataForm.machineId" placeholder="来源设备编号" clearable></el-input>
         </el-form-item>
         <el-form-item label="来源设备名称">

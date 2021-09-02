@@ -1,14 +1,16 @@
 server:
   port: 11000
+  servlet:
+    context-path: /xxl-job-admin
 
 # mysql
 spring:
   datasource:
     #MySQL配置
     driverClassName: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://127.0.0.1:3306/smart_agriculture_manage?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
+    url: jdbc:mysql://127.0.0.1:3306/smartagriculture_manage?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
     username: root
-    password: 123456
+    password: root
   jackson:
     time-zone: GMT+8
     date-format: yyyy-MM-dd HH:mm:ss
@@ -20,6 +22,19 @@ spring:
         server-addr: 127.0.0.1:8848
   application:
     name: manage
+
+  # freemarker
+  freemarker:
+    template-loader-path: classpath:/templates/
+    suffix: .ftl
+    charset: UTF-8
+    request-context-attribute: request
+    settings:
+      number_format: 0.##########
+  mvc:
+    servlet:
+      load-on-startup: 0
+    static-path-pattern: /static/**
 
 mybatis-plus:
   mapperLocations: classpath:mapper/**/*.xml
@@ -33,3 +48,23 @@ mybatis-plus:
 logging:
   level:
     com.yifan.mall.product: debug
+
+xxl:
+  job:
+    i18n: zh_CN
+    accessToken:
+    triggerpool:
+      fast:
+        max: 200
+      slow:
+        max: 100
+    logretentiondays: 30
+
+management:
+  server:
+    servlet:
+      context-path: /actuator
+  health:
+    mail:
+      enabled: false
+
