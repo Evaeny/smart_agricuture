@@ -1,7 +1,7 @@
 package com.smart.agriculture.manage.dao;
 
 
-import com.smart.agriculture.manage.xxl.job.core.model.XxlJobLogReport;
+import com.smart.agriculture.common.core.model.XxlJobLogReport;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 

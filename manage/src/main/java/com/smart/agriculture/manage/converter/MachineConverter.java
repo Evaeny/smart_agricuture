@@ -31,8 +31,8 @@ public interface MachineConverter {
     )
     MachineSensorEntity controllerToSensor(MachineControllerEntity machineControllerEntity);
 
-    @Mappings(
-            @Mapping(target = "id", ignore = true)
+    @Mappings({@Mapping(target = "id", ignore = true),
+            @Mapping(target = "age", source = "age")}
     )
     MachineSensorEntity infoToSensor(MachineInfoEntity machineInfoEntity);
 

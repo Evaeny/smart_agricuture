@@ -48,4 +48,6 @@ public class MachineInfoEntity implements Serializable {
      */
     private String unit;
 
+    private long age;
+
 }

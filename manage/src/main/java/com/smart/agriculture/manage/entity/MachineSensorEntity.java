@@ -61,4 +61,6 @@ public class MachineSensorEntity implements Serializable {
      */
     private String enableStatus;
 
+    private String age;
+
 }
