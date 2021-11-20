@@ -1,13 +1,13 @@
 package com.smart.agriculture.manage.core.alarm.impl;
 
 
-import com.smart.agriculture.manage.config.JobAlarm;
-import com.smart.agriculture.manage.config.XxlJobAdminConfig;
 import com.smart.agriculture.common.core.model.XxlJobGroup;
 import com.smart.agriculture.common.core.model.XxlJobInfo;
 import com.smart.agriculture.common.core.model.XxlJobLog;
 import com.smart.agriculture.manage.config.I18nUtil;
-import com.xxl.job.core.biz.model.ReturnT;
+import com.smart.agriculture.manage.config.JobAlarm;
+import com.smart.agriculture.manage.config.XxlJobAdminConfig;
+import com.smart.agriculture.manage.entity.model.ReturnT;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;

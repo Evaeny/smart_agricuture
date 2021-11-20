@@ -3,10 +3,10 @@ package com.smart.agriculture.manage.core.scheduler;
 
 import com.smart.agriculture.manage.config.I18nUtil;
 import com.smart.agriculture.manage.config.XxlJobAdminConfig;
+import com.smart.agriculture.manage.core.client.ExecutorBizClient;
 import com.smart.agriculture.manage.core.thread.*;
-import com.xxl.job.core.biz.ExecutorBiz;
-import com.xxl.job.core.biz.client.ExecutorBizClient;
-import com.xxl.job.core.enums.ExecutorBlockStrategyEnum;
+import com.smart.agriculture.manage.entity.enums.ExecutorBlockStrategyEnum;
+import com.smart.agriculture.manage.service.ExecutorBiz;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

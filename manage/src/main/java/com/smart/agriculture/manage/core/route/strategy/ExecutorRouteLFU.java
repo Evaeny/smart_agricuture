@@ -2,8 +2,8 @@ package com.smart.agriculture.manage.core.route.strategy;
 
 
 import com.smart.agriculture.manage.config.ExecutorRouter;
-import com.xxl.job.core.biz.model.ReturnT;
-import com.xxl.job.core.biz.model.TriggerParam;
+import com.smart.agriculture.manage.entity.model.ReturnT;
+import com.smart.agriculture.manage.entity.model.TriggerParam;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;

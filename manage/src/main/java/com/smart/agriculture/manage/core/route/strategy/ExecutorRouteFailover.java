@@ -4,9 +4,10 @@ package com.smart.agriculture.manage.core.route.strategy;
 import com.smart.agriculture.manage.config.I18nUtil;
 import com.smart.agriculture.manage.config.ExecutorRouter;
 import com.smart.agriculture.manage.core.scheduler.XxlJobScheduler;
-import com.xxl.job.core.biz.ExecutorBiz;
-import com.xxl.job.core.biz.model.ReturnT;
-import com.xxl.job.core.biz.model.TriggerParam;
+import com.smart.agriculture.manage.entity.model.ReturnT;
+import com.smart.agriculture.manage.entity.model.TriggerParam;
+import com.smart.agriculture.manage.service.ExecutorBiz;
+
 
 import java.util.List;
 
