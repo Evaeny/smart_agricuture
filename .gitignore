@@ -24,3 +24,23 @@
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 
+.mvn/wrapper/MavenWrapperDownloader.java
+.mvn/wrapper/maven-wrapper.properties
+HELP.md
+manage/src/main/resources/public/static/adminlte/bower_components/
+mvnw
+mvnw.cmd
+renren-fast-vue/nvm
+renren-generator/target/classes/application.yml
+renren-generator/target/classes/generator.properties
+renren-generator/target/classes/mapper/
+renren-generator/target/classes/static/
+renren-generator/target/classes/template/
+renren-generator/target/classes/views/
+renren-generator/target/generated-sources/
+renren-generator/target/generated-test-sources/
+renren-generator/target/maven-archiver/
+renren-generator/target/maven-status/
+renren-generator/target/renren-generator-1.0.0.jar.original
+renren-generator/target/surefire-reports/
+src/
