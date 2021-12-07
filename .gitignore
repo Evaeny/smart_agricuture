@@ -28,7 +28,6 @@ hs_err_pid*
 .mvn/wrapper/MavenWrapperDownloader.java
 .mvn/wrapper/maven-wrapper.properties
 HELP.md
-manage/src/main/resources/public/static/adminlte/bower_components/
 mvnw
 mvnw.cmd
 renren-fast-vue/nvm
@@ -45,3 +44,4 @@ renren-generator/target/maven-status/
 renren-generator/target/renren-generator-1.0.0.jar.original
 renren-generator/target/surefire-reports/
 src/
+
